@@ -14,13 +14,13 @@ export default class LogoutUserUseCase {
     this.authenticationRepository = authenticationRepository
   }
 
-  async execute (useCasePayload): Promise<void> {
+  public async execute (useCasePayload): Promise<void> {
     const { refreshToken } = this.validatePayload(useCasePayload)
     await this.authenticationRepository.checkAvailabilityToken(refreshToken)
     await this.authenticationRepository.deleteToken(refreshToken)
   }
 
-  private validatePayload (payload): {refreshToken: string} {
+  private validatePayload (payload): { refreshToken: string } {
     const { refreshToken } = payload
 
     if (!refreshToken) {

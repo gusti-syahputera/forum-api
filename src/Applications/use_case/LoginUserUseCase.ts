@@ -28,7 +28,7 @@ export default class LoginUserUseCase {
       this.passwordHash = passwordHash
     }
 
-    async execute (useCasePayload): Promise<NewAuthentication> {
+    public async execute (useCasePayload): Promise<NewAuthentication> {
       const { username, password } = new UserLogin(useCasePayload)
 
       const encryptedPassword = await this.userRepository.getPasswordByUsername(username)

@@ -13,7 +13,7 @@ export default class DeleteAuthenticationUseCase {
     this.authenticationRepository = authenticationRepository
   }
 
-  async execute (useCasePayload): Promise<void> {
+  public async execute (useCasePayload): Promise<void> {
     const { refreshToken } = this.validatePayload(useCasePayload)
     await this.authenticationRepository.checkAvailabilityToken(refreshToken)
     await this.authenticationRepository.deleteToken(refreshToken)
