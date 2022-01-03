@@ -17,10 +17,8 @@
   "dependencies": {
     "@hapi/hapi": "^20.2.1",
     "@hapi/jwt": "^2.1.0",
-    "@types/hapi__hapi": "^20.0.10",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
-    "eslint-plugin-promise": "^6.0.0",
     "instances-container": "^2.0.5",
     "nanoid": "^3.1.30",
     "pg": "^8.7.1",
@@ -30,6 +28,7 @@
     "tsyringe": "^4.6.0"
   },
   "devDependencies": {
+    "@types/hapi__hapi": "^20.0.10",
     "@types/jest": "^27.4.0",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
@@ -39,6 +38,7 @@
     "eslint-config-standard-with-typescript": "^21.0.1",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
     "jest": "^27.4.5",
     "node-pg-migrate": "^6.2.0",
     "nodemon": "^2.0.15",
