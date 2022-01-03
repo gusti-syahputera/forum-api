@@ -1,6 +1,6 @@
 {
   "name": "forum-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Submisi Proyek Automation Testing dan Clean Architecture",
   "main": "index.js",
   "scripts": {
@@ -15,21 +15,21 @@
   "author": "Gusti Ridhoni Syahputera",
   "license": "MIT",
   "dependencies": {
-    "@hapi/hapi": "^20.1.5",
-    "@hapi/jwt": "^2.0.1",
+    "@hapi/hapi": "^20.2.1",
+    "@hapi/jwt": "^2.1.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
-    "instances-container": "^2.0.3",
-    "nanoid": "^3.1.23",
-    "pg": "^8.6.0"
+    "instances-container": "^2.0.5",
+    "nanoid": "^3.1.30",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.24",
-    "eslint": "^7.30.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.23.4",
-    "jest": "^27.0.6",
-    "node-pg-migrate": "^5.10.0",
-    "nodemon": "^2.0.9"
+    "@types/jest": "^27.4.0",
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.4.5",
+    "node-pg-migrate": "^6.2.0",
+    "nodemon": "^2.0.15"
   }
 }
