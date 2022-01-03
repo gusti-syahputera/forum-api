@@ -1,0 +1,7 @@
+node_modules
+.idea
+.env
+config/database/test.json
+config/database/local.json
+coverage
+dist

@@ -1,0 +1,39 @@
+version: "3"
+services:
+  node:
+    image: 'node:14'
+    tty: true
+    env_file:
+      - .env
+    ports:
+      - '${PORT:-5000}:${PORT:-5000}'
+    volumes:
+      - .:/app:Z
+    networks:
+      - backend_expert
+    depends_on:
+      - pgsql
+  pgsql:
+    image: 'postgres:14'
+    env_file:
+      - .env
+    ports:
+      - '${FORWARD_DB_PORT:-5432}:5432'
+    environment:
+      POSTGRES_PASSWORD: '${PGPASSWORD}'
+      POSTGRES_DB: '${PGDATABASE}'
+      POSTGRES_USER: '${PGUSER}'
+    volumes:
+      - 'backend_expert_pgsql:/var/lib/postgresql/data'
+    networks:
+      - backend_expert
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${PGDATABASE}", "-U", "${PGUSER}" ]
+      retries: 3
+      timeout: 5s
+networks:
+  backend_expert:
+    driver: bridge
+volumes:
+  backend_expert_pgsql:
+    driver: local
