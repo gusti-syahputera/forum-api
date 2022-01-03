@@ -1,10 +1,12 @@
 import AuthenticationRepository from '../../../Domains/authentications/AuthenticationRepository'
 import DeleteAuthenticationUseCase from '../DeleteAuthenticationUseCase'
 
+const instantAsyncFunc = async (): Promise<any> => await Promise.resolve()
+
 const getAuthenticationRepositoryMock = (): AuthenticationRepository => ({
-  addToken: jest.fn().mockImplementation(() => {}),
-  checkAvailabilityToken: jest.fn().mockImplementation(async () => await Promise.resolve()),
-  deleteToken: jest.fn().mockImplementation(async () => await Promise.resolve())
+  addToken: jest.fn().mockImplementation(instantAsyncFunc),
+  checkAvailabilityToken: jest.fn().mockImplementation(instantAsyncFunc),
+  deleteToken: jest.fn().mockImplementation(instantAsyncFunc)
 })
 
 describe('DeleteAuthenticationUseCase', () => {

@@ -4,6 +4,8 @@ import UserRepository from '../../../Domains/users/UserRepository'
 import PasswordHash from '../../security/PasswordHash'
 import AddUserUseCase from '../AddUserUseCase'
 
+const instantAsyncFunc = async (): Promise<any> => await Promise.resolve()
+
 describe('AddUserUseCase', () => {
   /**
    * Menguji apakah use case mampu mengoskestrasikan langkah demi langkah dengan benar.
@@ -23,14 +25,14 @@ describe('AddUserUseCase', () => {
 
     /** creating mocked dependency of use case */
     const mockUserRepository: UserRepository = {
-      verifyAvailableUsername: jest.fn().mockImplementation(async () => await Promise.resolve()),
+      verifyAvailableUsername: jest.fn().mockImplementation(instantAsyncFunc),
       addUser: jest.fn().mockImplementation(async () => expectedRegisteredUser),
-      getPasswordByUsername: jest.fn().mockImplementation(() => {}),
-      getIdByUsername: jest.fn().mockImplementation(() => {})
+      getPasswordByUsername: jest.fn().mockImplementation(instantAsyncFunc),
+      getIdByUsername: jest.fn().mockImplementation(instantAsyncFunc)
     }
     const mockPasswordHash: PasswordHash = {
       hash: jest.fn().mockImplementation(async () => 'encrypted_password'),
-      comparePassword: jest.fn().mockImplementation(() => true)
+      comparePassword: jest.fn().mockImplementation(instantAsyncFunc)
     }
 
     /** creating use case instance */
