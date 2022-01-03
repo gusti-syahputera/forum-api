@@ -1,19 +1,19 @@
 export default class RegisterUser {
-  username: string;
-  password: string;
-  fullname: string;
+  username: string
+  password: string
+  fullname: string
 
   constructor (payload) {
-    RegisterUser.verifyPayload(payload)
-
-    const { username, password, fullname } = payload
-
-    this.username = username
-    this.password = password
-    this.fullname = fullname
+    ({
+      username: this.username,
+      password: this.password,
+      fullname: this.fullname
+    } = this.verifyPayload(payload))
   }
 
-  private static verifyPayload ({ username, password, fullname }): void {
+  private verifyPayload (payload): { username: string, password: string, fullname: string } {
+    const { username, password, fullname } = payload
+
     if (!username || !password || !fullname) {
       throw new Error('REGISTER_USER.NOT_CONTAIN_NEEDED_PROPERTY')
     }
@@ -29,5 +29,7 @@ export default class RegisterUser {
     if (username.match(/^[\w]+$/) == null) {
       throw new Error('REGISTER_USER.USERNAME_CONTAIN_RESTRICTED_CHARACTER')
     }
+
+    return payload
   }
 }

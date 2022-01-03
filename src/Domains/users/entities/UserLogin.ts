@@ -1,15 +1,14 @@
 export default class UserLogin {
-  username: string;
-  password: string;
+  username: string
+  password: string
 
   constructor (payload) {
-    UserLogin.verifyPayload(payload)
-
-    this.username = payload.username
-    this.password = payload.password
+    ({ username: this.username, password: this.password } = this.verifyPayload(payload))
   }
 
-  private static verifyPayload ({ username, password }): void {
+  private verifyPayload (payload): { username: string, password: string } {
+    const { username, password } = payload
+
     if (!username || !password) {
       throw new Error('USER_LOGIN.NOT_CONTAIN_NEEDED_PROPERTY')
     }
@@ -17,5 +16,7 @@ export default class UserLogin {
     if (typeof username !== 'string' || typeof password !== 'string') {
       throw new Error('USER_LOGIN.NOT_MEET_DATA_TYPE_SPECIFICATION')
     }
+
+    return payload
   }
 }
