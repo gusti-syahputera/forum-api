@@ -11,7 +11,7 @@ export default class UsersHandler {
     this.postUserHandler = this.postUserHandler.bind(this)
   }
 
-  public async postUserHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
+  async postUserHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     const addUserUseCase = this.container.resolve(AddUserUseCase)
     const addedUser = await addUserUseCase.execute(request.payload)
 

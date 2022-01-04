@@ -15,7 +15,7 @@ export default class AuthenticationsHandler {
     this.deleteAuthenticationHandler = this.deleteAuthenticationHandler.bind(this)
   }
 
-  public async postAuthenticationHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
+  async postAuthenticationHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     const loginUserUseCase = this.container.resolve(LoginUserUseCase)
     const { accessToken, refreshToken } = await loginUserUseCase.execute(request.payload)
 
@@ -30,7 +30,7 @@ export default class AuthenticationsHandler {
     return response
   }
 
-  public async putAuthenticationHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
+  async putAuthenticationHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     const refreshAuthenticationUseCase = this.container.resolve(RefreshAuthenticationUseCase)
     const accessToken = await refreshAuthenticationUseCase.execute(request.payload)
 
@@ -40,7 +40,7 @@ export default class AuthenticationsHandler {
     })
   }
 
-  public async deleteAuthenticationHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
+  async deleteAuthenticationHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
     const logoutUserUseCase = this.container.resolve(LogoutUserUseCase)
     await logoutUserUseCase.execute(request.payload)
     return h.response({ status: 'success' })
