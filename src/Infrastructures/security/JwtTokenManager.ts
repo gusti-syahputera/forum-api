@@ -36,7 +36,7 @@ export default class JwtTokenManager implements AuthenticationTokenManager {
     }
   }
 
-  async decodePayload (token) {
+  async decodePayload (token): Promise<any> {
     const artifacts = this.jwt.decode(token)
     return artifacts.decoded.payload
   }
