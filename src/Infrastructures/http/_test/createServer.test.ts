@@ -1,9 +1,14 @@
 import createServer from '../createServer'
+import IocContainer from '../../../Commons/IocContainer'
+
+const getContainerMock = (): IocContainer => ({
+  resolve: <T>(Token): T => new Token()
+})
 
 describe('HTTP server', () => {
   it('should response 404 when request unregistered route', async () => {
     // Arrange
-    const server = await createServer({})
+    const server = await createServer(getContainerMock())
 
     // Action
     const response = await server.inject({
@@ -22,7 +27,7 @@ describe('HTTP server', () => {
       fullname: 'Dicoding Indonesia',
       password: 'super_secret'
     }
-    const server = await createServer({}) // fake injection
+    const server = await createServer(getContainerMock())
 
     // Action
     const response = await server.inject({

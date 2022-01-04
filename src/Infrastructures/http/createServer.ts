@@ -5,9 +5,9 @@ import ClientError from '../../Commons/exceptions/ClientError'
 import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslator'
 import users, { Options as UsersPluginOptions } from '../../Interfaces/http/api/users'
 import authentications, { Options as AuthenticationsPluginOptions } from '../../Interfaces/http/api/authentications'
-import { DependencyContainer } from 'tsyringe'
+import IocContainer from '../../Commons/IocContainer'
 
-export default async function createServer (container): Promise<Hapi.Server> {
+export default async function createServer (container: IocContainer): Promise<Hapi.Server> {
   const server = Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT

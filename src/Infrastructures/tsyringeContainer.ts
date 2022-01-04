@@ -3,6 +3,8 @@ import 'reflect-metadata'
 
 import { container } from 'tsyringe'
 
+import IocContainer from '../Commons/IocContainer'
+
 // External dependencies
 import { nanoid } from 'nanoid'
 import * as bcrypt from 'bcrypt'
@@ -35,4 +37,5 @@ container.register('passwordHash', { useClass: BcryptPasswordHash })
 container.register('authenticationRepository', { useClass: AuthenticationRepositoryPostgres })
 container.register('authenticationTokenManager', { useClass: JwtTokenManager })
 
-export default container
+const container_: IocContainer = container
+export default container_

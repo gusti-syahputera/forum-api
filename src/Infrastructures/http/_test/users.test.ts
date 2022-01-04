@@ -1,6 +1,6 @@
 import pool from '../../database/postgres/pool'
 import UsersTableTestHelper from '../../../Commons/tests/UsersTableTestHelper'
-import container from '../../container'
+import container from '../../tsyringeContainer'
 import createServer from '../createServer'
 
 describe('/users endpoint', () => {
