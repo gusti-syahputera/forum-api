@@ -19,15 +19,15 @@ export default class JwtTokenManager implements AuthenticationTokenManager {
     this.jwt = jwt
   }
 
-  async createAccessToken (payload) {
+  async createAccessToken (payload): Promise<string> {
     return this.jwt.generate(payload, process.env.ACCESS_TOKEN_KEY)
   }
 
-  async createRefreshToken (payload) {
+  async createRefreshToken (payload): Promise<string> {
     return this.jwt.generate(payload, process.env.REFRESH_TOKEN_KEY)
   }
 
-  async verifyRefreshToken (token) {
+  async verifyRefreshToken (token): Promise<void> {
     try {
       const artifacts = this.jwt.decode(token)
       this.jwt.verify(artifacts, process.env.REFRESH_TOKEN_KEY)
