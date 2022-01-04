@@ -1,5 +1,4 @@
 /* istanbul ignore file */
-import 'reflect-metadata'
 
 import { container } from 'tsyringe'
 

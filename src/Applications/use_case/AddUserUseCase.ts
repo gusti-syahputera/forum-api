@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-
 import { inject, injectable } from 'tsyringe'
 
 import UserRepository from '../../Domains/users/UserRepository'

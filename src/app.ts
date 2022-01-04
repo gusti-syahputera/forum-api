@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import * as dotenv from 'dotenv'
 import { Server } from '@hapi/hapi'
 

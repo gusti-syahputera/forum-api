@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-
 import { Pool } from 'pg'
 import { injectable, inject } from 'tsyringe'
 
