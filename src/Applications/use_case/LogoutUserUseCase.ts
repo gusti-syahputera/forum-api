@@ -14,7 +14,7 @@ export default class LogoutUserUseCase {
     this.authenticationRepository = authenticationRepository
   }
 
-  public async execute (useCasePayload): Promise<void> {
+  async execute (useCasePayload): Promise<void> {
     const { refreshToken } = this.validatePayload(useCasePayload)
     await this.authenticationRepository.checkAvailabilityToken(refreshToken)
     await this.authenticationRepository.deleteToken(refreshToken)

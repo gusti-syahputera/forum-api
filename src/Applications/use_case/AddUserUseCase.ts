@@ -20,7 +20,7 @@ export default class AddUserUseCase {
     this.passwordHash = passwordHash
   }
 
-  public async execute (useCasePayload): Promise<RegisteredUser> {
+  async execute (useCasePayload): Promise<RegisteredUser> {
     const registerUser = new RegisterUser(useCasePayload)
     await this.userRepository.verifyAvailableUsername(registerUser.username)
     registerUser.password = await this.passwordHash.hash(registerUser.password)

@@ -22,11 +22,11 @@ export default class BcryptPasswordHash implements PasswordHash {
     this.saltRound = saltRound
   }
 
-  public async hash (password: string): Promise<string> {
+  async hash (password: string): Promise<string> {
     return this.bcrypt.hash(password, this.saltRound)
   }
 
-  public async comparePassword (password: string, hashedPassword: string): Promise<void> {
+  async comparePassword (password: string, hashedPassword: string): Promise<void> {
     const result = await this.bcrypt.compare(password, hashedPassword)
 
     if (!result) {

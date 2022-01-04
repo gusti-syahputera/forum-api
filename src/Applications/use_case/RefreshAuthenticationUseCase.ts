@@ -17,7 +17,7 @@ export default class RefreshAuthenticationUseCase {
     this.authenticationTokenManager = authenticationTokenManager
   }
 
-  public async execute (useCasePayload): Promise<string> {
+  async execute (useCasePayload): Promise<string> {
     const { refreshToken } = this.verifyPayload(useCasePayload)
 
     await this.authenticationTokenManager.verifyRefreshToken(refreshToken)

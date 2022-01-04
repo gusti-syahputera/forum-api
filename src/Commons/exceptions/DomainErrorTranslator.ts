@@ -14,7 +14,7 @@ export default class DomainErrorTranslator {
     'DELETE_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('refresh token harus string')
   }
 
-  public static translate (error): any {
+  static translate (error): any {
     return DomainErrorTranslator.directories[error.message] ?? error
   }
 }

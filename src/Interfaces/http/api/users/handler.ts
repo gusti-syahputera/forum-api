@@ -8,10 +8,9 @@ export default class UsersHandler {
 
   constructor (container: DependencyContainer) {
     this.container = container
-    this.postUserHandler = this.postUserHandler.bind(this)
   }
 
-  public async postUserHandler (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
+  postUserHandler = async (request: Request, h: ResponseToolkit): Promise<ResponseObject> => {
     const addUserUseCase = this.container.resolve(AddUserUseCase)
     const addedUser = await addUserUseCase.execute(request.payload)
 
@@ -21,5 +20,5 @@ export default class UsersHandler {
     })
     response.code(201)
     return response
-  }
+  };
 }
