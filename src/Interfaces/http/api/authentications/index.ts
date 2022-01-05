@@ -1,4 +1,4 @@
-import { Plugin } from '@hapi/hapi'
+import { Plugin, Server, ServerRegisterPluginObject as PluginObject } from '@hapi/hapi'
 
 import IocContainer from '../../../../Commons/IocContainer'
 
@@ -11,12 +11,20 @@ export interface Options {
   renderer: ResponseRenderer
 }
 
-const authentications: Plugin<Options> = {
+export const authentications: Plugin<Options> = {
   name: 'authentications',
   register: async (server, { container, renderer }) => {
-    const authenticationsHandler = new AuthenticationsHandler(container, renderer)
-    server.route(routes(authenticationsHandler))
+    const handler = new AuthenticationsHandler(container, renderer)
+    server.route(routes(handler))
   }
 }
 
-export default authentications
+const register = async (server: Server, container: IocContainer, renderer: ResponseRenderer): Promise<void> => {
+  const pluginObject: PluginObject<Options> = {
+    plugin: authentications,
+    options: { container, renderer }
+  }
+  await server.register(pluginObject)
+}
+
+export default register
