@@ -41,8 +41,11 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "jest": "^27.4.5",
+    "jest-ts-auto-mock": "^2.0.0",
     "node-pg-migrate": "^6.2.0",
     "nodemon": "^2.0.15",
+    "ts-auto-mock": "^3.5.0",
+    "ttypescript": "^1.5.13",
     "typescript": "^4.5.4"
   }
 }

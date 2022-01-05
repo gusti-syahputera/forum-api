@@ -6,6 +6,15 @@
     "module": "commonjs",
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "plugins": [
+      {
+        "transform": "ts-auto-mock/transformer",
+        "cacheBetweenTests": false
+      }
+    ],
+    "paths": {
+      "jest-ts-auto-mock": ["../../index"]
+    }
   }
 }
