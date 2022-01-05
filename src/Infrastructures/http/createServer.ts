@@ -10,7 +10,7 @@ import ResponseRenderer from '../../Interfaces/http/ResponseRenderer'
 
 export default async function createServer (
   container: IocContainer,
-  renderer: ResponseRenderer = new ResponseRenderer()
+  renderer = new ResponseRenderer('terjadi kegagalan pada server kami')
 ): Promise<Hapi.Server> {
   const server = Hapi.server({
     host: process.env.HOST,
