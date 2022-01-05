@@ -1,17 +1,9 @@
-import 'reflect-metadata'
-
-import { inject, injectable } from 'tsyringe'
 import AuthenticationRepository from '../../Domains/authentications/AuthenticationRepository'
 
-@injectable()
 export default class DeleteAuthenticationUseCase {
-  private readonly authenticationRepository: AuthenticationRepository
-
   constructor (
-  @inject('authenticationRepository') authenticationRepository: AuthenticationRepository
-  ) {
-    this.authenticationRepository = authenticationRepository
-  }
+    private readonly authenticationRepository: AuthenticationRepository
+  ) {}
 
   async execute (useCasePayload): Promise<void> {
     const { refreshToken } = this.validatePayload(useCasePayload)

@@ -1,18 +1,10 @@
-import 'reflect-metadata'
-
 import { Pool } from 'pg'
-import { injectable, inject } from 'tsyringe'
 
 import InvariantError from '../../Commons/exceptions/InvariantError'
 import AuthenticationRepository from '../../Domains/authentications/AuthenticationRepository'
 
-@injectable()
 export default class AuthenticationRepositoryPostgres implements AuthenticationRepository {
-  private readonly pool: Pool
-
-  constructor (@inject('pool') pool: Pool) {
-    this.pool = pool
-  }
+  constructor (private readonly pool: Pool) {}
 
   async addToken (token): Promise<any> {
     await this.pool.query({

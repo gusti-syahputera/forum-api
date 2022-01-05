@@ -1,11 +1,12 @@
-import { DependencyContainer } from 'tsyringe'
 import { Plugin } from '@hapi/hapi'
+
+import IocContainer from '../../../../Commons/IocContainer'
 
 import routes from './routes'
 import AuthenticationsHandler from './handler'
 
 export interface Options {
-  container: DependencyContainer
+  container: IocContainer
 }
 
 const authentications: Plugin<Options> = {

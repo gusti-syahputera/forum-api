@@ -1,7 +1,4 @@
-import 'reflect-metadata'
-
 import { Pool } from 'pg'
-import { injectable, inject } from 'tsyringe'
 
 import InvariantError from '../../Commons/exceptions/InvariantError'
 import RegisteredUser from '../../Domains/users/entities/RegisteredUser'
@@ -9,18 +6,11 @@ import UserRepository from '../../Domains/users/UserRepository'
 
 type GenerateIdFunc = () => string
 
-@injectable()
 export default class UserRepositoryPostgres implements UserRepository {
-  private readonly pool: Pool
-  private readonly idGenerator: GenerateIdFunc
-
   constructor (
-  @inject('pool') pool: Pool,
-    @inject('idGenerator') idGenerator: GenerateIdFunc
-  ) {
-    this.pool = pool
-    this.idGenerator = idGenerator
-  }
+    private readonly pool: Pool,
+    private readonly idGenerator: GenerateIdFunc
+  ) {}
 
   async verifyAvailableUsername (username): Promise<void> {
     const result = await this.pool.query({

@@ -1,8 +1,10 @@
+import 'reflect-metadata'
+
 import * as dotenv from 'dotenv'
 import { Server } from '@hapi/hapi'
 
 import createServer from './Infrastructures/http/createServer'
-import container from './Infrastructures/container'
+import container from './Infrastructures/tsyringeContainer'
 
 dotenv.config()
 

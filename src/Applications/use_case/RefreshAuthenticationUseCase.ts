@@ -1,21 +1,11 @@
-import 'reflect-metadata'
-
-import { inject, injectable } from 'tsyringe'
 import AuthenticationRepository from '../../Domains/authentications/AuthenticationRepository'
 import AuthenticationTokenManager from '../security/AuthenticationTokenManager'
 
-@injectable()
 export default class RefreshAuthenticationUseCase {
-  private readonly authenticationRepository: AuthenticationRepository;
-  private readonly authenticationTokenManager: AuthenticationTokenManager;
-
   constructor (
-  @inject('authenticationRepository') authenticationRepository: AuthenticationRepository,
-    @inject('authenticationTokenManager') authenticationTokenManager: AuthenticationTokenManager
-  ) {
-    this.authenticationRepository = authenticationRepository
-    this.authenticationTokenManager = authenticationTokenManager
-  }
+    private readonly authenticationRepository: AuthenticationRepository,
+    private readonly authenticationTokenManager: AuthenticationTokenManager
+  ) {}
 
   async execute (useCasePayload): Promise<string> {
     const { refreshToken } = this.verifyPayload(useCasePayload)

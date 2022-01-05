@@ -1,26 +1,16 @@
-import 'reflect-metadata'
-
-import { inject, injectable } from 'tsyringe'
-
 import PasswordHash from '../../Applications/security/PasswordHash'
 import AuthenticationError from '../../Commons/exceptions/AuthenticationError'
 
 export interface IBcrypt {
   hash: (string, number) => string
+  compare: (plain, encrypted) => Promise<boolean>
 }
 
-@injectable()
 export default class BcryptPasswordHash implements PasswordHash {
-  private readonly bcrypt: any
-  private readonly saltRound: number
-
   constructor (
-  @inject('bcrypt') bcrypt: IBcrypt,
-    @inject('saltRound') saltRound: number = 10
-  ) {
-    this.bcrypt = bcrypt
-    this.saltRound = saltRound
-  }
+    private readonly bcrypt: IBcrypt,
+    private readonly saltRound: number = 10
+  ) {}
 
   async hash (password: string): Promise<string> {
     return this.bcrypt.hash(password, this.saltRound)

@@ -1,19 +1,19 @@
-import { DependencyContainer } from 'tsyringe'
 import { Request, ResponseObject, ResponseToolkit } from '@hapi/hapi'
 
+import IocContainer from '../../../../Commons/IocContainer'
 import LoginUserUseCase from '../../../../Applications/use_case/LoginUserUseCase'
 import RefreshAuthenticationUseCase from '../../../../Applications/use_case/RefreshAuthenticationUseCase'
 import LogoutUserUseCase from '../../../../Applications/use_case/LogoutUserUseCase'
 
 export default class AuthenticationsHandler {
-  private readonly container: DependencyContainer
+  private readonly container: IocContainer
 
-  constructor (container: DependencyContainer) {
+  constructor (container: IocContainer) {
     this.container = container
   }
 
   postAuthenticationHandler = async (request: Request, h: ResponseToolkit): Promise<ResponseObject> => {
-    const loginUserUseCase = this.container.resolve(LoginUserUseCase)
+    const loginUserUseCase = this.container.resolve<LoginUserUseCase>(LoginUserUseCase)
     const { accessToken, refreshToken } = await loginUserUseCase.execute(request.payload)
 
     const response = h.response({
@@ -28,7 +28,7 @@ export default class AuthenticationsHandler {
   }
 
   putAuthenticationHandler = async (request: Request, h: ResponseToolkit): Promise<ResponseObject> => {
-    const refreshAuthenticationUseCase = this.container.resolve(RefreshAuthenticationUseCase)
+    const refreshAuthenticationUseCase = this.container.resolve<RefreshAuthenticationUseCase>(RefreshAuthenticationUseCase)
     const accessToken = await refreshAuthenticationUseCase.execute(request.payload)
 
     return h.response({
@@ -38,7 +38,7 @@ export default class AuthenticationsHandler {
   };
 
   deleteAuthenticationHandler = async (request: Request, h: ResponseToolkit): Promise<ResponseObject> => {
-    const logoutUserUseCase = this.container.resolve(LogoutUserUseCase)
+    const logoutUserUseCase = this.container.resolve<LogoutUserUseCase>(LogoutUserUseCase)
     await logoutUserUseCase.execute(request.payload)
     return h.response({ status: 'success' })
   };

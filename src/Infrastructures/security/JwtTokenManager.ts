@@ -1,7 +1,3 @@
-import 'reflect-metadata'
-
-import { inject, injectable } from 'tsyringe'
-
 import AuthenticationTokenManager from '../../Applications/security/AuthenticationTokenManager'
 import InvariantError from '../../Commons/exceptions/InvariantError'
 
@@ -11,13 +7,8 @@ export interface IJwtHelper {
   verify: (artifacts, secret, options?) => void | never
 }
 
-@injectable()
 export default class JwtTokenManager implements AuthenticationTokenManager {
-  private readonly jwt: IJwtHelper;
-
-  constructor (@inject('jwt') jwt: IJwtHelper) {
-    this.jwt = jwt
-  }
+  constructor (private readonly jwt: IJwtHelper) {}
 
   async createAccessToken (payload): Promise<string> {
     return this.jwt.generate(payload, process.env.ACCESS_TOKEN_KEY)
