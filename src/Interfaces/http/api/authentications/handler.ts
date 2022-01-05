@@ -6,11 +6,7 @@ import RefreshAuthenticationUseCase from '../../../../Applications/use_case/Refr
 import LogoutUserUseCase from '../../../../Applications/use_case/LogoutUserUseCase'
 
 export default class AuthenticationsHandler {
-  private readonly container: IocContainer
-
-  constructor (container: IocContainer) {
-    this.container = container
-  }
+  constructor (private readonly container: IocContainer) {}
 
   postAuthenticationHandler = async (request: Request, h: ResponseToolkit): Promise<ResponseObject> => {
     const loginUserUseCase = this.container.resolve<LoginUserUseCase>(LoginUserUseCase)

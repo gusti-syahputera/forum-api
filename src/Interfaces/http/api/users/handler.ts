@@ -4,11 +4,7 @@ import IocContainer from '../../../../Commons/IocContainer'
 import AddUserUseCase from '../../../../Applications/use_case/AddUserUseCase'
 
 export default class UsersHandler {
-  private readonly container: IocContainer
-
-  constructor (container: IocContainer) {
-    this.container = container
-  }
+  constructor (private readonly container: IocContainer) {}
 
   postUserHandler = async (request: Request, h: ResponseToolkit): Promise<ResponseObject> => {
     const addUserUseCase = this.container.resolve<AddUserUseCase>(AddUserUseCase)
