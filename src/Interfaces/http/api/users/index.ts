@@ -1,4 +1,4 @@
-import { Plugin } from '@hapi/hapi'
+import { Plugin, Server, ServerRegisterPluginObject as PluginObject } from '@hapi/hapi'
 
 import IocContainer from '../../../../Commons/IocContainer'
 
@@ -11,7 +11,7 @@ export interface Options {
   renderer: ResponseRenderer
 }
 
-const users: Plugin<Options> = {
+export const users: Plugin<Options> = {
   name: 'users',
   register: async (server, { container, renderer }) => {
     const usersHandler = new UsersHandler(container, renderer)
@@ -19,4 +19,12 @@ const users: Plugin<Options> = {
   }
 }
 
-export default users
+const register = async (server: Server, container: IocContainer, renderer: ResponseRenderer): Promise<void> => {
+  const pluginObject: PluginObject<Options> = {
+    plugin: users,
+    options: { container, renderer }
+  }
+  await server.register(pluginObject)
+}
+
+export default register

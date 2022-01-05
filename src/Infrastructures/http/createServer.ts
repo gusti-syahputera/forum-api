@@ -1,10 +1,9 @@
 import * as Hapi from '@hapi/hapi'
-import { ServerRegisterPluginObject as PluginObject } from '@hapi/hapi'
 
 import ClientError from '../../Commons/exceptions/ClientError'
 import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslator'
-import users, { Options as UsersPluginOptions } from '../../Interfaces/http/api/users'
-import authentications, { Options as AuthenticationsPluginOptions } from '../../Interfaces/http/api/authentications'
+import registerUsersPlugin from '../../Interfaces/http/api/users'
+import registerAuthenticationsPlugin from '../../Interfaces/http/api/authentications'
 import IocContainer from '../../Commons/IocContainer'
 import ResponseRenderer from '../../Interfaces/http/ResponseRenderer'
 
@@ -17,17 +16,10 @@ export default async function createServer (
     port: process.env.PORT
   })
 
-  const usersPlugin: PluginObject<UsersPluginOptions> = {
-    plugin: users,
-    options: { container, renderer }
-  }
-
-  const authenticationsPlugin: PluginObject<AuthenticationsPluginOptions> = {
-    plugin: authentications,
-    options: { container, renderer }
-  }
-
-  await server.register([usersPlugin, authenticationsPlugin])
+  await Promise.all([
+    registerUsersPlugin(server, container, renderer),
+    registerAuthenticationsPlugin(server, container, renderer)
+  ])
 
   server.ext('onPreResponse', (request, h) => {
     // mendapatkan konteks response dari request
