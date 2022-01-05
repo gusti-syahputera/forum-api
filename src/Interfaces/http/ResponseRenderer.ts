@@ -3,11 +3,11 @@ import { ResponseObject, ResponseToolkit } from '@hapi/hapi'
 export default class ResponseRenderer {
   constructor (private readonly defaultErrorMessage = 'internal error has occured') {}
 
-  response (h: ResponseToolkit, status: string, message: string, data: any, code: number): ResponseObject {
+  response (h: ResponseToolkit, status: string, message: string|undefined = undefined, data: any, code: number): ResponseObject {
     return h.response({ status, message, data }).code(code)
   }
 
-  success (h: ResponseToolkit, message: string, data: any, code = 200): ResponseObject {
+  success (h: ResponseToolkit, message: string|undefined = undefined, data?: any, code = 200): ResponseObject {
     return this.response(h, 'success', message, data, code)
   }
 

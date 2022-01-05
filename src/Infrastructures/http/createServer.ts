@@ -6,8 +6,12 @@ import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslato
 import users, { Options as UsersPluginOptions } from '../../Interfaces/http/api/users'
 import authentications, { Options as AuthenticationsPluginOptions } from '../../Interfaces/http/api/authentications'
 import IocContainer from '../../Commons/IocContainer'
+import ResponseRenderer from '../../Interfaces/http/ResponseRenderer'
 
-export default async function createServer (container: IocContainer): Promise<Hapi.Server> {
+export default async function createServer (
+  container: IocContainer,
+  renderer: ResponseRenderer = new ResponseRenderer()
+): Promise<Hapi.Server> {
   const server = Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT
@@ -15,12 +19,12 @@ export default async function createServer (container: IocContainer): Promise<Ha
 
   const usersPlugin: PluginObject<UsersPluginOptions> = {
     plugin: users,
-    options: { container }
+    options: { container, renderer }
   }
 
   const authenticationsPlugin: PluginObject<AuthenticationsPluginOptions> = {
     plugin: authentications,
-    options: { container }
+    options: { container, renderer }
   }
 
   await server.register([usersPlugin, authenticationsPlugin])
