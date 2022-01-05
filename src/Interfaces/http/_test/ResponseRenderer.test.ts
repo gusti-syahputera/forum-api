@@ -50,4 +50,23 @@ describe('ResponseRenderer', () => {
     expect(spyResponseMethod).toBeCalledWith(h, 'success', message, data, 200)
     expect(spyResponseMethod).toBeCalledWith(h, 'success', message, data, customCode)
   })
+
+  it('should call self `response` methods in order to produce a "fail" response', () => {
+    // Arrange spies
+    const renderer = new ResponseRenderer()
+    const spyResponseMethod = jest.spyOn(renderer, 'response')
+
+    // Arrange inputs
+    const h = createMock<ResponseToolkit>()
+    const message = 'Anda membuat kesalahan'
+    const customCode = 404
+
+    // Action
+    const response1: ResponseObject = renderer.fail(h, message) // optional code
+    const response2: ResponseObject = renderer.fail(h, message, customCode)
+
+    // Assert
+    expect(spyResponseMethod).toBeCalledWith(h, 'fail', message, undefined, 400)
+    expect(spyResponseMethod).toBeCalledWith(h, 'fail', message, undefined, customCode)
+  })
 })
