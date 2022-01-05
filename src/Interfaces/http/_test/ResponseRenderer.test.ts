@@ -69,4 +69,26 @@ describe('ResponseRenderer', () => {
     expect(spyResponseMethod).toBeCalledWith(h, 'fail', message, undefined, 400)
     expect(spyResponseMethod).toBeCalledWith(h, 'fail', message, undefined, customCode)
   })
+
+  it('produces an "internal error" response', () => {
+    // Arrange spies
+    const defaultMessage = 'Terjadi kegagalan pada server'
+    const renderer = new ResponseRenderer(defaultMessage)
+    const spyResponseMethod = jest.spyOn(renderer, 'response')
+
+    // Arrange inputs
+    const h = createMock<ResponseToolkit>()
+    const customMessage = 'Radiasi kosmik menyebabkan server kami tidak dapat memproses request Anda'
+    const customCode = 501
+
+    // Action
+    const response1: ResponseObject = renderer.internalError(h) // optional message
+    const response2: ResponseObject = renderer.internalError(h, customMessage)
+    const response3: ResponseObject = renderer.internalError(h, customMessage, customCode)
+
+    // Assert
+    expect(spyResponseMethod).toBeCalledWith(h, 'error', defaultMessage, undefined, 500)
+    expect(spyResponseMethod).toBeCalledWith(h, 'error', customMessage, undefined, 500)
+    expect(spyResponseMethod).toBeCalledWith(h, 'error', customMessage, undefined, customCode)
+  })
 })
