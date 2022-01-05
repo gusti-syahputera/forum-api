@@ -3,7 +3,7 @@ export default class Thread {
     body: string
     title: string
     username: string
-    comments: []
+    comments?: []
     date: string
 
     constructor (payload) {
@@ -34,7 +34,7 @@ export default class Thread {
         date
       } = payload
 
-      if (!id || !title || !body || !date || !username || !comments) {
+      if (!id || !title || !body || !date || !username) {
         throw new Error('THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
       }
 
@@ -43,7 +43,7 @@ export default class Thread {
         typeof body !== 'string' ||
         typeof date !== 'string' ||
         typeof username !== 'string' ||
-        !(Array.isArray(comments))
+        (!!comments && !(Array.isArray(comments)))
       ) {
         throw new Error('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')
       }

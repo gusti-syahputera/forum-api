@@ -8,7 +8,7 @@ describe('an AddedThread entity', () => {
       title: 'sebuah judul',
       body: 'isi thread',
       date: undefined,
-      comments: undefined
+      comments: undefined // opsional
     }
 
     // Action and Assert
@@ -52,6 +52,5 @@ describe('an AddedThread entity', () => {
     expect(thread.body).toEqual(payload.body)
     expect(thread.date).toEqual(payload.date)
     expect(thread.username).toEqual(payload.username)
-    expect(thread.comments).toEqual(payload.comments)
   })
 })
