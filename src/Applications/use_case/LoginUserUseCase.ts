@@ -23,8 +23,8 @@ export default class LoginUserUseCase {
 
     const id = await this.userRepository.getIdByUsername(username)
 
-    const accessToken = await this.authenticationTokenManager.createAccessToken({ username, id })
-    const refreshToken = await this.authenticationTokenManager.createRefreshToken({ username, id })
+    const accessToken = await this.authenticationTokenManager.createAccessToken({ username, sub: id })
+    const refreshToken = await this.authenticationTokenManager.createRefreshToken({ username, sub: id })
 
     const newAuthentication = new NewAuthentication({ accessToken, refreshToken })
 
