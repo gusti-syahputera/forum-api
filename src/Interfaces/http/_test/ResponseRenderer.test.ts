@@ -5,7 +5,7 @@ import { ResponseObject, ResponseToolkit } from '@hapi/hapi'
 import ResponseRenderer from '../ResponseRenderer'
 
 describe('ResponseRenderer', () => {
-  it('should call Hapi\'s toolkit methods in order to produce a ResponseObject', () => {
+  it('produces a Hapi\'s ResponseObject', () => {
     // Arrange mocks and spies
     const responseMock = createMock<ResponseObject>()
     const spyCodeMethod = jest.spyOn(responseMock, 'code')
@@ -31,7 +31,7 @@ describe('ResponseRenderer', () => {
     expect(spyCodeMethod).toBeCalledWith(code)
   })
 
-  it('should call self `response` methods in order to produce a "success" response', () => {
+  it('produces a "success" response', () => {
     // Arrange spies
     const renderer = new ResponseRenderer()
     const spyResponseMethod = jest.spyOn(renderer, 'response')
@@ -51,7 +51,7 @@ describe('ResponseRenderer', () => {
     expect(spyResponseMethod).toBeCalledWith(h, 'success', message, data, customCode)
   })
 
-  it('should call self `response` methods in order to produce a "fail" response', () => {
+  it('produces a "fail" response', () => {
     // Arrange spies
     const renderer = new ResponseRenderer()
     const spyResponseMethod = jest.spyOn(renderer, 'response')
