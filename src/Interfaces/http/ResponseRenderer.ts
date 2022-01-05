@@ -5,11 +5,11 @@ export default class ResponseRenderer {
     return h.response({ status, message, data }).code(code)
   }
 
-  success (h, message, data, code = 200): ResponseObject {
+  success (h: ResponseToolkit, message: string, data: any, code = 200): ResponseObject {
     return this.response(h, 'success', message, data, code)
   }
 
-  fail (h, message, code = 400): ResponseObject {
+  fail (h: ResponseToolkit, message: string, code = 400): ResponseObject {
     return this.response(h, 'fail', message, undefined, code)
   }
 }
