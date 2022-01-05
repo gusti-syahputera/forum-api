@@ -14,8 +14,8 @@ export interface Options {
 export const authentications: Plugin<Options> = {
   name: 'authentications',
   register: async (server, { container, renderer }) => {
-    const authenticationsHandler = new AuthenticationsHandler(container, renderer)
-    server.route(routes(authenticationsHandler))
+    const handler = new AuthenticationsHandler(container, renderer)
+    server.route(routes(handler))
   }
 }
 

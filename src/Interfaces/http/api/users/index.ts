@@ -14,8 +14,8 @@ export interface Options {
 export const users: Plugin<Options> = {
   name: 'users',
   register: async (server, { container, renderer }) => {
-    const usersHandler = new UsersHandler(container, renderer)
-    server.route(routes(usersHandler))
+    const handler = new UsersHandler(container, renderer)
+    server.route(routes(handler))
   }
 }
 
