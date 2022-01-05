@@ -1,7 +1,7 @@
 import pool from '../../database/postgres/pool'
 import UsersTableTestHelper from '../../../Commons/tests/UsersTableTestHelper'
 import AuthenticationsTableTestHelper from '../../../Commons/tests/AuthenticationsTableTestHelper'
-import container from '../../tsyringeContainer'
+import container, { tokens as containerTokens } from '../../tsyringeContainer'
 import createServer from '../createServer'
 import JwtTokenManager from '../../security/JwtTokenManager'
 
@@ -244,7 +244,7 @@ describe('/authentications endpoint', () => {
       // Arrange
       const server = await createServer(container)
       const refreshToken = await container
-        .resolve<JwtTokenManager>('authenticationTokenManager')
+        .resolve<JwtTokenManager>(containerTokens.AuthenticationTokenManager)
         .createRefreshToken({ username: 'dicoding' })
 
       // Action
