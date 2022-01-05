@@ -1,10 +1,12 @@
 import * as Hapi from '@hapi/hapi'
 
+import IocContainer from '../../Commons/IocContainer'
+import ResponseRenderer from '../../Interfaces/http/ResponseRenderer'
+
+/* Plugins */
 import registerUsersPlugin from '../../Interfaces/http/api/users'
 import registerAuthenticationsPlugin from '../../Interfaces/http/api/authentications'
 import registerErrorRendererPlugin from '../../Interfaces/http/api/error-renderer'
-import IocContainer from '../../Commons/IocContainer'
-import ResponseRenderer from '../../Interfaces/http/ResponseRenderer'
 
 export default async function createServer (
   container: IocContainer,
