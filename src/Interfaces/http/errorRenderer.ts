@@ -3,7 +3,7 @@ import { Request, ResponseToolkit, Server } from '@hapi/hapi'
 import ResponseRenderer from './ResponseRenderer'
 import { ClientError, DomainErrorTranslator } from '../../Commons/exceptions'
 
-export default async (server: Server, renderer: ResponseRenderer): Promise<void> => {
+export default (server: Server, renderer: ResponseRenderer): void => {
   server.ext('onPreResponse', makeHandler(renderer))
 }
 
