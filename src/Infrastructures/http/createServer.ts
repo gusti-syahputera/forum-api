@@ -4,7 +4,7 @@ import IocContainer from '../../Commons/IocContainer'
 import ResponseRenderer from '../../Interfaces/http/ResponseRenderer'
 
 /* Plugins */
-import registerJwtAuthStrategy from '../../Interfaces/http/api/jwtAuthStrategy'
+import registerJwtAuthStrategy from '../../Interfaces/http/jwtAuthStrategy'
 import registerUsersPlugin from '../../Interfaces/http/api/users'
 import registerAuthenticationsPlugin from '../../Interfaces/http/api/authentications'
 import registerErrorRendererPlugin from '../../Interfaces/http/api/error-renderer'
