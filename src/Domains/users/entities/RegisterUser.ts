@@ -26,7 +26,7 @@ export default class RegisterUser {
       throw new Error('REGISTER_USER.USERNAME_LIMIT_CHAR')
     }
 
-    if (username.match(/^[\w]+$/) == null) {
+    if (username.match(/^[\w.]+$/) == null) {
       throw new Error('REGISTER_USER.USERNAME_CONTAIN_RESTRICTED_CHARACTER')
     }
 
