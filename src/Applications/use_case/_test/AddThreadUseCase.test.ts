@@ -2,8 +2,8 @@ import * as faker from 'faker'
 import { createMock } from 'ts-auto-mock'
 import { method, On } from 'ts-auto-mock/extension'
 
-import { AddedThread } from '../../../../Domains/threads/entities'
-import ThreadRepository from '../../../../Domains/threads/ThreadRepository'
+import { AddedThread } from '../../../Domains/threads/entities'
+import ThreadRepository from '../../../Domains/threads/ThreadRepository'
 import AddThreadUseCase from '../AddThreadUseCase'
 
 describe('AddThreadUseCase', () => {

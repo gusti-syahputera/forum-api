@@ -1,5 +1,5 @@
-import ThreadRepository from '../../../Domains/threads/ThreadRepository'
-import { AddedThread, NewThread } from '../../../Domains/threads/entities'
+import ThreadRepository from '../../Domains/threads/ThreadRepository'
+import { AddedThread, NewThread } from '../../Domains/threads/entities'
 
 export default class AddThreadUseCase {
   constructor (

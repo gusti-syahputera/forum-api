@@ -1,7 +1,7 @@
 import IocContainer from '../../../../Commons/IocContainer'
 import ResponseRenderer from '../../ResponseRenderer'
 import { Request, ResponseObject, ResponseToolkit } from '@hapi/hapi'
-import AddThreadUseCase from '../../../../Applications/use_case/thread_use_cases/AddThreadUseCase'
+import AddThreadUseCase from '../../../../Applications/use_case/AddThreadUseCase'
 
 export default class ThreadsHandler {
   constructor (
