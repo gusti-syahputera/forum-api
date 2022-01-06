@@ -6,8 +6,8 @@ import {
   ServerRegisterPluginObject as PluginObject
 } from '@hapi/hapi'
 
-import ResponseRenderer from '../../ResponseRenderer'
-import { ClientError, DomainErrorTranslator } from '../../../../Commons/exceptions'
+import ResponseRenderer from './ResponseRenderer'
+import { ClientError, DomainErrorTranslator } from '../../Commons/exceptions'
 
 export interface Options {
   renderer: ResponseRenderer

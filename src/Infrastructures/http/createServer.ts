@@ -8,7 +8,7 @@ import registerJwtAuthStrategy from '../../Interfaces/http/jwtAuthStrategy'
 import registerUsersPlugin from '../../Interfaces/http/api/users'
 import registerAuthenticationsPlugin from '../../Interfaces/http/api/authentications'
 import registerThreadsPlugin from '../../Interfaces/http/api/threads'
-import registerErrorRendererPlugin from '../../Interfaces/http/api/error-renderer'
+import registerErrorRendererPlugin from '../../Interfaces/http/errorRenderer'
 
 export default async function createServer (
   container: IocContainer,
