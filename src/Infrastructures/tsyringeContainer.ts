@@ -23,6 +23,9 @@ import LogoutUserUseCase from '../Applications/use_case/LogoutUserUseCase'
 import RefreshAuthenticationUseCase from '../Applications/use_case/RefreshAuthenticationUseCase'
 import ThreadRepositoryPostgres from './repository/ThreadRepositoryPostgres'
 import AddThreadUseCase from '../Applications/use_case/thread_use_cases/AddThreadUseCase'
+import AddCommentUseCase from '../Applications/use_case/AddCommentUseCase'
+import DeleteCommentUseCase from '../Applications/use_case/DeleteCommentUseCase'
+import CommentRepositoryPostgres from './repository/CommentRepositoryPostgres'
 
 /* eslint-disable symbol-description */
 export const tokens = {
@@ -37,7 +40,8 @@ export const tokens = {
   PasswordHash: Symbol(),
   AuthenticationRepository: Symbol(),
   AuthenticationTokenManager: Symbol(),
-  ThreadsRepository: Symbol()
+  ThreadsRepository: Symbol(),
+  CommentsRepository: Symbol()
 }
 /* eslint-enable symbol-description */
 const t = tokens
@@ -76,6 +80,12 @@ container.register(t.ThreadsRepository, {
   )
 })
 
+container.register(t.CommentsRepository, {
+  useFactory: (c) => new CommentRepositoryPostgres(
+    c.resolve(t.pool), c.resolve(t.generateId), c.resolve(t.getCurrentTime)
+  )
+})
+
 container.register(AddUserUseCase, {
   useFactory: (c) => new AddUserUseCase(c.resolve(t.UserRepository), c.resolve(t.PasswordHash))
 })
@@ -106,6 +116,18 @@ container.register(DeleteAuthenticationUseCase, {
 
 container.register(AddThreadUseCase, {
   useFactory: (c) => new AddThreadUseCase(c.resolve(t.ThreadsRepository))
+})
+
+container.register(AddCommentUseCase, {
+  useFactory: (c) => new AddCommentUseCase(
+    c.resolve(t.ThreadsRepository), c.resolve(t.CommentsRepository)
+  )
+})
+
+container.register(DeleteCommentUseCase, {
+  useFactory: (c) => new DeleteCommentUseCase(
+    c.resolve(t.ThreadsRepository), c.resolve(t.CommentsRepository)
+  )
 })
 
 const container_: IocContainer = container

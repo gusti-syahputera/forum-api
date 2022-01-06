@@ -8,6 +8,7 @@ import registerJwtAuthStrategy from '../../Interfaces/http/jwtAuthStrategy'
 import registerUsersPlugin from '../../Interfaces/http/api/users'
 import registerAuthenticationsPlugin from '../../Interfaces/http/api/authentications'
 import registerThreadsPlugin from '../../Interfaces/http/api/threads'
+import registerCommentsPlugin from '../../Interfaces/http/api/comments'
 import registerErrorRenderer from '../../Interfaces/http/errorRenderer'
 
 export default async function createServer (
@@ -28,7 +29,8 @@ export default async function createServer (
   await Promise.all([
     registerUsersPlugin(server, container, renderer),
     registerAuthenticationsPlugin(server, container, renderer),
-    registerThreadsPlugin(server, container, renderer, authStrategyName)
+    registerThreadsPlugin(server, container, renderer, authStrategyName),
+    registerCommentsPlugin(server, container, renderer, authStrategyName)
   ])
 
   return server

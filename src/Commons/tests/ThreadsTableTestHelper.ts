@@ -1,18 +1,22 @@
 /* istanbul ignore file */
+import * as faker from 'faker'
+
 import pool from '../../Infrastructures/database/postgres/pool'
 
 export default {
   async addThread ({
-    id = 'thread-1',
-    title = 'sebuah judul',
-    body = 'isi teks thread',
-    owner = 'user-1',
-    date = '2022-01-01T00:00:00.000Z'
+    id = `thread-${faker.datatype.uuid()}`,
+    title = faker.lorem.words(),
+    body = faker.lorem.paragraphs(),
+    owner = `user-${faker.datatype.uuid()}`,
+    date = faker.datatype.datetime().toISOString()
   }) {
     await pool.query({
       text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5)',
       values: [id, title, body, owner, date]
     })
+
+    return { id, title, body, owner, date }
   },
 
   async findThreadById (id: string) {
