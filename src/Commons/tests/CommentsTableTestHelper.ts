@@ -17,7 +17,7 @@ export default {
       values: [id, thread_id, owner, content, date, deleted_at]
     })
 
-    return { id, content, owner, date, deleted_at }
+    return { id, thread_id, owner, content, date, deleted_at }
   },
 
   async findCommentById (id: string) {
