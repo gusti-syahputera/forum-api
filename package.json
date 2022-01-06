@@ -4,7 +4,7 @@
   "description": "Submisi Proyek Automation Testing dan Clean Architecture",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.ts",
+    "start": "node dist/app.js",
     "start:dev": "nodemon src/app.ts",
     "test": "jest --setupFiles dotenv/config -i",
     "test:watch:change": "jest --watch --setupFiles dotenv/config -i",
@@ -28,6 +28,7 @@
     "tsyringe": "^4.6.0"
   },
   "devDependencies": {
+    "@types/faker": "^5.5.9",
     "@types/hapi__hapi": "^20.0.10",
     "@types/jest": "^27.4.0",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
@@ -40,6 +41,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
+    "faker": "^5.5.3",
     "jest": "^27.4.5",
     "jest-ts-auto-mock": "^2.0.0",
     "node-pg-migrate": "^6.2.0",

@@ -1,12 +1,14 @@
 /* istanbul ignore file */
+import * as faker from 'faker'
+
 import pool from '../../Infrastructures/database/postgres/pool'
 
 export default {
   async addUser ({
-    id = 'user-123',
-    username = 'dicoding',
-    password = 'secret',
-    fullname = 'Dicoding Indonesia'
+    id = `user-${faker.datatype.uuid()}`,
+    username = faker.internet.userName(),
+    password = faker.internet.password(),
+    fullname = faker.name.findName()
   }) {
     const query = {
       text: 'INSERT INTO users VALUES($1, $2, $3, $4)',
@@ -14,6 +16,8 @@ export default {
     }
 
     await pool.query(query)
+
+    return { id, username, password, fullname }
   },
 
   async findUsersById (id: string) {
@@ -27,6 +31,6 @@ export default {
   },
 
   async cleanTable () {
-    await pool.query('TRUNCATE TABLE users')
+    await pool.query('DELETE FROM users')
   }
 }

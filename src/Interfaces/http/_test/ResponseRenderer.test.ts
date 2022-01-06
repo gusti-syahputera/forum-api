@@ -24,7 +24,7 @@ describe('ResponseRenderer', () => {
 
     // Action
     const renderer = new ResponseRenderer()
-    const response: ResponseObject = renderer.response(h, status, message, data, code)
+    const response: ResponseObject = renderer.response(h, code, status, message, data)
 
     // Assert
     expect(spyResponseMethod).toBeCalledWith({ status, message, data })
@@ -47,8 +47,8 @@ describe('ResponseRenderer', () => {
     const response2: ResponseObject = renderer.success(h, message, data, customCode)
 
     // Assert
-    expect(spyResponseMethod).toBeCalledWith(h, 'success', message, data, 200)
-    expect(spyResponseMethod).toBeCalledWith(h, 'success', message, data, customCode)
+    expect(spyResponseMethod).toBeCalledWith(h, 200, 'success', message, data)
+    expect(spyResponseMethod).toBeCalledWith(h, customCode, 'success', message, data)
   })
 
   it('produces a "fail" response', () => {
@@ -66,8 +66,8 @@ describe('ResponseRenderer', () => {
     const response2: ResponseObject = renderer.fail(h, message, customCode)
 
     // Assert
-    expect(spyResponseMethod).toBeCalledWith(h, 'fail', message, undefined, 400)
-    expect(spyResponseMethod).toBeCalledWith(h, 'fail', message, undefined, customCode)
+    expect(spyResponseMethod).toBeCalledWith(h, 400, 'fail', message)
+    expect(spyResponseMethod).toBeCalledWith(h, customCode, 'fail', message)
   })
 
   it('produces an "internal error" response', () => {
@@ -87,8 +87,8 @@ describe('ResponseRenderer', () => {
     const response3: ResponseObject = renderer.internalError(h, customMessage, customCode)
 
     // Assert
-    expect(spyResponseMethod).toBeCalledWith(h, 'error', defaultMessage, undefined, 500)
-    expect(spyResponseMethod).toBeCalledWith(h, 'error', customMessage, undefined, 500)
-    expect(spyResponseMethod).toBeCalledWith(h, 'error', customMessage, undefined, customCode)
+    expect(spyResponseMethod).toBeCalledWith(h, 500, 'error', defaultMessage)
+    expect(spyResponseMethod).toBeCalledWith(h, 500, 'error', customMessage)
+    expect(spyResponseMethod).toBeCalledWith(h, customCode, 'error', customMessage)
   })
 })
