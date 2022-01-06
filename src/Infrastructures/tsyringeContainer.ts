@@ -21,18 +21,23 @@ import AddUserUseCase from '../Applications/use_case/AddUserUseCase'
 import LoginUserUseCase from '../Applications/use_case/LoginUserUseCase'
 import LogoutUserUseCase from '../Applications/use_case/LogoutUserUseCase'
 import RefreshAuthenticationUseCase from '../Applications/use_case/RefreshAuthenticationUseCase'
+import ThreadRepositoryPostgres from './repository/ThreadRepositoryPostgres'
+import AddThreadUseCase from '../Applications/use_case/thread_use_cases/AddThreadUseCase'
 
 /* eslint-disable symbol-description */
 export const tokens = {
   pool: Symbol(),
   idGenerator: Symbol(),
+  generateId: Symbol(),
+  getCurrentTime: Symbol(),
   bcrypt: Symbol(),
   saltRound: Symbol(),
   jwt: Symbol(),
   UserRepository: Symbol(),
   PasswordHash: Symbol(),
   AuthenticationRepository: Symbol(),
-  AuthenticationTokenManager: Symbol()
+  AuthenticationTokenManager: Symbol(),
+  ThreadsRepository: Symbol()
 }
 /* eslint-enable symbol-description */
 const t = tokens
@@ -41,6 +46,8 @@ const t = tokens
 
 container.register(t.pool, { useValue: pool })
 container.register(t.idGenerator, { useValue: nanoid })
+container.register(t.generateId, { useValue: nanoid })
+container.register(t.getCurrentTime, { useValue: () => new Date().toISOString() })
 container.register(t.bcrypt, { useValue: bcrypt })
 container.register(t.saltRound, { useValue: 10 })
 container.register(t.jwt, { useValue: Jwt.token })
@@ -61,6 +68,12 @@ container.register(t.AuthenticationRepository, {
 
 container.register(t.AuthenticationTokenManager, {
   useFactory: (c) => new JwtTokenManager(c.resolve(t.jwt))
+})
+
+container.register(t.ThreadsRepository, {
+  useFactory: (c) => new ThreadRepositoryPostgres(
+    c.resolve(t.pool), c.resolve(t.generateId), c.resolve(t.getCurrentTime)
+  )
 })
 
 container.register(AddUserUseCase, {
@@ -89,6 +102,10 @@ container.register(RefreshAuthenticationUseCase, {
 
 container.register(DeleteAuthenticationUseCase, {
   useFactory: (c) => new DeleteAuthenticationUseCase(c.resolve(t.AuthenticationRepository))
+})
+
+container.register(AddThreadUseCase, {
+  useFactory: (c) => new AddThreadUseCase(c.resolve(t.ThreadsRepository))
 })
 
 const container_: IocContainer = container
