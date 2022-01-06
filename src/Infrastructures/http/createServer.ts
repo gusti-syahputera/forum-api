@@ -19,13 +19,17 @@ export default async function createServer (
     port: process.env.PORT
   })
 
+  registerErrorRenderer(server, renderer)
+
+  // Register auth strategy
   const authStrategyName = await registerJwtAuthStrategy(server, 'JWT')
+
+  // Register API plugins
   await Promise.all([
     registerUsersPlugin(server, container, renderer),
     registerAuthenticationsPlugin(server, container, renderer),
     registerThreadsPlugin(server, container, renderer, authStrategyName)
   ])
-  registerErrorRenderer(server, renderer)
 
   return server
 }
