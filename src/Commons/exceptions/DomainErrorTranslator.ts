@@ -1,4 +1,6 @@
 import InvariantError from './InvariantError'
+import AuthorizationError from './AuthorizationError'
+import NotFoundError from './NotFoundError'
 
 export default class DomainErrorTranslator {
   private static readonly directories = {
@@ -18,7 +20,13 @@ export default class DomainErrorTranslator {
     'NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat thread baru karena tipe data tidak sesuai'),
 
     // Comments
-    'DELETE_COMMENT.NOT_FOUND': new AuthorizationError('tidak dapat menghapus comment karena komentar tidak ditemukan'),
+    'NEW_COMMENT.THREAD_NOT_FOUND': new NotFoundError('tidak dapat membuat comment baru karena thread tidak ada'),
+    'NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat comment baru karena properti yang dibutuhkan tidak ada'),
+    'NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat comment baru karena tipe data tidak sesuai'),
+    'DELETE_COMMENT.THREAD_NOT_FOUND': new NotFoundError('tidak dapat menghapus comment karena thread tidak ada'),
+    'DELETE_COMMENT.COMMENT_DOES_NOT_BELONG_TO_THREAD': new InvariantError('tidak dapat menghapus comment karena comment tidak ada pada thread'),
+    'DELETE_COMMENT.COMMENT_NOT_FOUND': new NotFoundError('tidak dapat menghapus comment karena comment tidak ada'),
+    'DELETE_COMMENT.USER_IS_NOT_OWNER': new AuthorizationError('tidak dapat menghapus comment karena Anda bukan pemilik comment ini')
   }
 
   static translate (error): any {
