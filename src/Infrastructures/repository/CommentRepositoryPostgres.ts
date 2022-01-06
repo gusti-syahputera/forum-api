@@ -2,7 +2,7 @@ import { Pool } from 'pg'
 
 import { NotFoundError } from '../../Commons/exceptions'
 import CommentRepository from '../../Domains/comments/CommentRepository'
-import { AddedComment, NewComment } from '../../Domains/comments/entities'
+import { AddedComment, Comment, NewComment } from '../../Domains/comments/entities'
 
 export default class CommentRepositoryPostgres implements CommentRepository {
   constructor (
@@ -35,5 +35,18 @@ export default class CommentRepositoryPostgres implements CommentRepository {
     if (result.rowCount === 0) {
       throw new NotFoundError('DELETE_COMMENT.NOT_FOUND')
     }
+  }
+
+  getCommentById = async (id: string): Promise<Comment> => {
+    const result = await this.pool.query({
+      text: 'SELECT * FROM comments WHERE id = $1',
+      values: [id]
+    })
+
+    if (result.rowCount === 0) {
+      throw new NotFoundError('COMMENT.NOT_FOUND')
+    }
+
+    return new Comment(Object.assign(result.rows[0]))
   }
 }
