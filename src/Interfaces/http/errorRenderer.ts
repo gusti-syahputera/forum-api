@@ -1,34 +1,11 @@
-import {
-  Plugin,
-  Request,
-  ResponseToolkit,
-  Server,
-  ServerRegisterPluginObject as PluginObject
-} from '@hapi/hapi'
+import { Request, ResponseToolkit, Server } from '@hapi/hapi'
 
 import ResponseRenderer from './ResponseRenderer'
 import { ClientError, DomainErrorTranslator } from '../../Commons/exceptions'
 
-export interface Options {
-  renderer: ResponseRenderer
+export default async (server: Server, renderer: ResponseRenderer): Promise<void> => {
+  server.ext('onPreResponse', makeHandler(renderer))
 }
-
-export const errorRenderer: Plugin<Options> = {
-  name: 'error-renderer',
-  register: async (server, { renderer }) => {
-    server.ext('onPreResponse', makeHandler(renderer))
-  }
-}
-
-const register = async (server: Server, renderer: ResponseRenderer): Promise<void> => {
-  const pluginObject: PluginObject<Options> = {
-    plugin: errorRenderer,
-    options: { renderer }
-  }
-  await server.register(pluginObject)
-}
-
-export default register
 
 const makeHandler = (renderer: ResponseRenderer) => (request: Request, h: ResponseToolkit) => {
   // mendapatkan konteks response dari request
