@@ -67,7 +67,7 @@ describe('DeleteCommentUseCase', () => {
     expect(commentRepositoryMocks.getCommentById).toBeCalledWith(useCasePayload.commentId)
   })
 
-  it('should orchestrating the delete comment action correctly', async () => {
+  it('should orchestrate the delete comment action correctly', async () => {
     // Arrange doubles
     const comment = generateComment()
     const commentRepository = createMock<CommentRepository>()

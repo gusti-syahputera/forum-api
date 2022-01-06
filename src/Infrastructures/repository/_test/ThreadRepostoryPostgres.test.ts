@@ -91,7 +91,7 @@ describe('ThreadRepositoryPostgres', () => {
 
       // Action
       const repository = new ThreadRepositoryPostgres(pool, generateIdStub, getCurrentTimeStub)
-      const addedThread = await repository.getThreadById(newThread.id)
+      const thread = await repository.getThreadById(newThread.id)
 
       // Assert
       const expectedThread = new Thread({
@@ -101,7 +101,7 @@ describe('ThreadRepositoryPostgres', () => {
         date: newThread.date,
         username: userData.username
       })
-      expect(addedThread).toStrictEqual(expectedThread)
+      expect(thread).toStrictEqual(expectedThread)
     })
   })
 })
