@@ -51,4 +51,42 @@ describe('CommentRepositoryPostgres', () => {
       expect(CommentsTableTestHelper.findCommentById(addedComment.id)).toBeDefined()
     })
   })
+
+  describe('deleteCommentById', () => {
+    it('should delete comment when comment exists', async () => {
+      // Arrange entities
+      const [userData1, userData2] = await Promise.all([
+        UsersTableTestHelper.addUser({}),
+        UsersTableTestHelper.addUser({})
+      ])
+      const threadData = await ThreadsTableTestHelper.addThread({ owner: userData1.id })
+      const commentData = await CommentsTableTestHelper.addComment({ thread_id: threadData.id, owner: userData2.id })
+
+      // Arrange doubles
+      const generateIdMock = createMock<() => string>()
+      const fakeDeletionDate = new Date().toISOString()
+      const getCurrentTimeFake = (): string => fakeDeletionDate
+
+      // Action
+      const repository = new CommentRepositoryPostgres(pool, generateIdMock, getCurrentTimeFake)
+      await repository.deleteCommentById(commentData.id)
+
+      // Assert database
+      const storedComment = await CommentsTableTestHelper.findCommentById(commentData.id)
+      expect(storedComment.deleted_at).toStrictEqual(fakeDeletionDate)
+    })
+
+    it('should reject when comment does not exist', async () => {
+      // Arrange doubles
+      const generateIdMock = createMock<() => string>()
+      const getCurrentTimeMock = createMock<() => string>()
+
+      // Arrange
+      const randomId = faker.datatype.uuid()
+
+      // Action and Assert
+      const repository = new CommentRepositoryPostgres(pool, generateIdMock, getCurrentTimeMock)
+      await expect(repository.deleteCommentById(randomId)).rejects.toThrowError('DELETE_COMMENT.NOT_FOUND')
+    })
+  })
 })
