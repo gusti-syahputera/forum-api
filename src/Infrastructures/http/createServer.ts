@@ -8,7 +8,7 @@ import registerJwtAuthStrategy from '../../Interfaces/http/jwtAuthStrategy'
 import registerUsersPlugin from '../../Interfaces/http/api/users'
 import registerAuthenticationsPlugin from '../../Interfaces/http/api/authentications'
 import registerThreadsPlugin from '../../Interfaces/http/api/threads'
-import registerErrorRendererPlugin from '../../Interfaces/http/api/error-renderer'
+import registerErrorRenderer from '../../Interfaces/http/errorRenderer'
 
 export default async function createServer (
   container: IocContainer,
@@ -23,9 +23,9 @@ export default async function createServer (
   await Promise.all([
     registerUsersPlugin(server, container, renderer),
     registerAuthenticationsPlugin(server, container, renderer),
-    registerThreadsPlugin(server, container, renderer, authStrategyName),
-    registerErrorRendererPlugin(server, renderer)
+    registerThreadsPlugin(server, container, renderer, authStrategyName)
   ])
+  registerErrorRenderer(server, renderer)
 
   return server
 }
