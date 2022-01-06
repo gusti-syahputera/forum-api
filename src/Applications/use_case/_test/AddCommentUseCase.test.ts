@@ -5,6 +5,7 @@ import { method, On } from 'ts-auto-mock/extension'
 import AddCommentUseCase, { Payload } from '../AddCommentUseCase'
 import { AddedComment, NewComment } from '../../../Domains/comments/entities'
 import CommentRepository from '../../../Domains/comments/CommentRepository'
+import ThreadRepository from '../../../Domains/threads/ThreadRepository'
 
 describe('AddCommentUseCase', () => {
   it('should orchestrating the add comment action correctly', async () => {
@@ -22,6 +23,7 @@ describe('AddCommentUseCase', () => {
       content: useCasePayload.content,
       owner: useCasePayload.owner
     })
+    const threadRepository = createMock<ThreadRepository>()
     const commentRepository = createMock<CommentRepository>()
     const commentRepositoryMocks = {
       addComment: On(commentRepository)
@@ -33,7 +35,7 @@ describe('AddCommentUseCase', () => {
     const expectedAddedComment = Object.assign(addedComment)
 
     // Action
-    const useCase = new AddCommentUseCase(commentRepository)
+    const useCase = new AddCommentUseCase(threadRepository, commentRepository)
     const promise = useCase.execute(useCasePayload)
 
     // Assert
