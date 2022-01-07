@@ -5,7 +5,8 @@ import pool from '../../database/postgres/pool'
 import UsersTableTestHelper from '../../../Commons/tests/UsersTableTestHelper'
 import ThreadsTableTestHelper from '../../../Commons/tests/ThreadsTableTestHelper'
 import CommentsTableTestHelper from '../../../Commons/tests/CommentsTableTestHelper'
-import { AddedComment, Comment, NewComment } from '../../../Domains/comments/entities'
+
+import { AddedComment, Comment, NewComment, ThreadComment } from '../../../Domains/comments/entities'
 import CommentRepositoryPostgres from '../CommentRepositoryPostgres'
 
 describe('CommentRepositoryPostgres', () => {
@@ -124,6 +125,35 @@ describe('CommentRepositoryPostgres', () => {
       // Action and Assert
       const repository = new CommentRepositoryPostgres(pool, generateIdMock, getCurrentTimeMock)
       await expect(repository.getCommentById(randomId)).rejects.toThrowError('COMMENT.NOT_FOUND')
+    })
+  })
+
+  describe('getCommentsByThreadId', () => {
+    it('should return Comments of a Thread', async () => {
+      // Arrange entities
+      const userData = await UsersTableTestHelper.addUser({})
+      const threadData = await ThreadsTableTestHelper.addThread({ owner: userData.id })
+
+      // Arrange Comments
+      const commentCounts = 5
+      const commentsData = await Promise.all([...Array(commentCounts).keys()].map(
+        async () => await CommentsTableTestHelper
+          .addComment({ thread_id: threadData.id, owner: userData.id })
+      ))
+
+      // Arrange doubles
+      const generateIdMock = createMock<() => string>()
+      const getCurrentTimeMock = createMock<() => string>()
+
+      // Action
+      const repository = new CommentRepositoryPostgres(pool, generateIdMock, getCurrentTimeMock)
+      const comments = await repository.getCommentsByThreadId(threadData.id)
+
+      // Assert
+      const expectedComment = commentsData
+        .map(commentData => new ThreadComment({ ...commentData, username: userData.username }))
+        .sort((a, b) => +new Date(a.date) - +new Date(b.date))
+      expect(comments).toStrictEqual(expectedComment)
     })
   })
 })
