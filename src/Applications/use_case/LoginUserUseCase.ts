@@ -1,4 +1,4 @@
-import UserLogin from '../../Domains/users/entities/UserLogin'
+import { UserLogin } from '../../Domains/users/entities'
 import NewAuthentication from '../../Domains/authentications/entities/NewAuth'
 import UserRepository from '../../Domains/users/UserRepository'
 import AuthenticationRepository from '../../Domains/authentications/AuthenticationRepository'

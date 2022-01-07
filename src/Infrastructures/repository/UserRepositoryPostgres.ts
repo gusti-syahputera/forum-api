@@ -1,6 +1,6 @@
 import { Pool } from 'pg'
 
-import RegisteredUser from '../../Domains/users/entities/RegisteredUser'
+import { RegisteredUser } from '../../Domains/users/entities'
 import UserRepository from '../../Domains/users/UserRepository'
 
 type GenerateIdFunc = () => string

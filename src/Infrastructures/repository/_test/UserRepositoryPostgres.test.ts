@@ -1,6 +1,5 @@
 import UsersTableTestHelper from '../../../Commons/tests/UsersTableTestHelper'
-import RegisterUser from '../../../Domains/users/entities/RegisterUser'
-import RegisteredUser from '../../../Domains/users/entities/RegisteredUser'
+import { RegisterUser, RegisteredUser } from '../../../Domains/users/entities'
 import pool from '../../database/postgres/pool'
 import UserRepositoryPostgres from '../UserRepositoryPostgres'
 
