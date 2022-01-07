@@ -1,5 +1,4 @@
 import { createMock } from 'ts-auto-mock'
-import { NotFoundError } from '../../../Commons/exceptions'
 import { ThreadsTableTestHelper, UsersTableTestHelper } from '../../../Commons/tests'
 
 import pool from '../../database/postgres/pool'
