@@ -8,5 +8,9 @@ export default (handler: ThreadsHandler, authStrategy: string): ServerRoute[] =>
     path: '/threads',
     handler: handler.postThreadHandler,
     options: { auth: authStrategy }
+  }, {
+    method: 'GET',
+    path: '/threads/{threadId}',
+    handler: handler.getThreadHandler
   }
 ])

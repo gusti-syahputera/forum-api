@@ -35,7 +35,7 @@ export default class ThreadRepositoryPostgres implements ThreadRepository {
     })
 
     if (result.rowCount === 0) {
-      throw new NotFoundError('thread tidak ditemukan')
+      throw new NotFoundError('THREAD.NOT_FOUND')
     }
 
     return new Thread({ ...result.rows[0] })
