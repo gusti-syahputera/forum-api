@@ -1,6 +1,5 @@
 import { Pool } from 'pg'
 
-import InvariantError from '../../Commons/exceptions/InvariantError'
 import RegisteredUser from '../../Domains/users/entities/RegisteredUser'
 import UserRepository from '../../Domains/users/UserRepository'
 
@@ -19,7 +18,7 @@ export default class UserRepositoryPostgres implements UserRepository {
     })
 
     if (result.rowCount !== 0) {
-      throw new InvariantError('username tidak tersedia')
+      throw new Error('USERNAME.ALREADY_TAKEN')
     }
   }
 
@@ -42,7 +41,7 @@ export default class UserRepositoryPostgres implements UserRepository {
     })
 
     if (result.rowCount === 0) {
-      throw new InvariantError('username tidak ditemukan')
+      throw new Error('USERNAME.NOT_FOUND')
     }
 
     return result.rows[0].password
@@ -55,7 +54,7 @@ export default class UserRepositoryPostgres implements UserRepository {
     })
 
     if (result.rowCount === 0) {
-      throw new InvariantError('user tidak ditemukan')
+      throw new Error('USER.NOT_FOUND')
     }
 
     return result.rows[0].id

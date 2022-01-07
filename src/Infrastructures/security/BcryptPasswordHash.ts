@@ -1,5 +1,4 @@
 import PasswordHash from '../../Applications/security/PasswordHash'
-import AuthenticationError from '../../Commons/exceptions/AuthenticationError'
 
 export interface IBcrypt {
   hash: (string, number) => string
@@ -20,7 +19,7 @@ export default class BcryptPasswordHash implements PasswordHash {
     const result = await this.bcrypt.compare(password, hashedPassword)
 
     if (!result) {
-      throw new AuthenticationError('kredensial yang Anda masukkan salah')
+      throw new Error('AUTHENTICATION.INVALID_CREDENTIALS')
     }
   }
 }

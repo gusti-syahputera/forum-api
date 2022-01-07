@@ -1,9 +1,19 @@
 import InvariantError from './InvariantError'
 import AuthorizationError from './AuthorizationError'
 import NotFoundError from './NotFoundError'
+import AuthenticationError from './AuthenticationError'
 
 export default class DomainErrorTranslator {
   private static readonly directories = {
+    // Authentication (mechanism)
+    'AUTHENTICATION.INVALID_CREDENTIALS': new AuthenticationError('kredensial yang Anda masukkan salah'),
+    'AUTHENTICATION.INVALID_REFRESH_TOKEN': new InvariantError('refresh token tidak valid'),
+    'USERNAME.NOT_FOUND': new InvariantError('username tidak ditemukan'),
+    'USER.NOT_FOUND': new InvariantError('user tidak ditemukan'),
+    'REFRESH_TOKEN.NOT_FOUND': new InvariantError('refresh token tidak ditemukan di database'),
+    'USERNAME.ALREADY_TAKEN': new InvariantError('username tidak tersedia'),
+
+    // Authentications  (entity)
     'REGISTER_USER.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat user baru karena properti yang dibutuhkan tidak ada'),
     'REGISTER_USER.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat user baru karena tipe data tidak sesuai'),
     'REGISTER_USER.USERNAME_LIMIT_CHAR': new InvariantError('tidak dapat membuat user baru karena karakter username melebihi batas limit'),
@@ -30,8 +40,14 @@ export default class DomainErrorTranslator {
     'DELETE_COMMENT.USER_IS_NOT_OWNER': new AuthorizationError('tidak dapat menghapus comment karena Anda bukan pemilik comment ini'),
 
     // Replies
+    'NEW_REPLY.THREAD_NOT_FOUND': new NotFoundError('tidak dapat membuat reply baru karena thread tidak ada'),
+    'NEW_REPLY.COMMENT_NOT_FOUND': new NotFoundError('tidak dapat membuat reply baru karena comment tidak'),
     'NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat reply baru karena properti yang dibutuhkan tidak ada'),
-    'NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat reply baru karena tipe data tidak sesuai')
+    'NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat reply baru karena tipe data tidak sesuai'),
+    'DELETE_REPLY.THREAD_NOT_FOUND': new NotFoundError('tidak dapat menghapus reply karena thread tidak ada'),
+    'DELETE_REPLY.COMMENT_NOT_FOUND': new NotFoundError('tidak dapat menghapus reply karena comment tidak ada'),
+    'DELETE_REPLY.REPLY_NOT_FOUND': new NotFoundError('tidak dapat menghapus reply karena reply tidak ada'),
+    'DELETE_REPLY.USER_IS_NOT_OWNER': new AuthorizationError('tidak dapat menghapus reply karena Anda bukan pemilik reply ini')
   }
 
   static translate (error): any {

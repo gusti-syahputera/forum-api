@@ -1,4 +1,3 @@
-import { AuthorizationError, InvariantError, NotFoundError } from '../../Commons/exceptions'
 import ThreadRepository from '../../Domains/threads/ThreadRepository'
 import CommentRepository from '../../Domains/comments/CommentRepository'
 
@@ -20,7 +19,7 @@ export default class DeleteCommentUseCase {
     // Get Comment entity
     const commentPromise = this.commentRepository.getCommentById(commentId)
     const comment = await commentPromise.catch((e) => {
-      if (e instanceof NotFoundError) {
+      if (e.message === 'COMMENT.NOT_FOUND') {
         e.message = 'DELETE_COMMENT.COMMENT_NOT_FOUND'
       }
       throw e
@@ -28,11 +27,11 @@ export default class DeleteCommentUseCase {
 
     // Assert that the comment belongs to the thread
     if (comment.thread_id !== threadId) {
-      throw new InvariantError('DELETE_COMMENT.COMMENT_DOES_NOT_BELONG_TO_THREAD')
+      throw new Error('DELETE_COMMENT.COMMENT_DOES_NOT_BELONG_TO_THREAD')
     }
     // Assert that user is the comment's owner
     if (comment.owner !== userId) {
-      throw new AuthorizationError('DELETE_COMMENT.USER_IS_NOT_OWNER')
+      throw new Error('DELETE_COMMENT.USER_IS_NOT_OWNER')
     }
 
     // Proceed to delete
@@ -43,7 +42,7 @@ export default class DeleteCommentUseCase {
     try {
       await this.threadRepository.getThreadById(threadId)
     } catch (e) {
-      if (e instanceof NotFoundError) {
+      if (e.message === 'THREAD.NOT_FOUND') {
         e.message = 'DELETE_COMMENT.THREAD_NOT_FOUND'
       }
       throw e

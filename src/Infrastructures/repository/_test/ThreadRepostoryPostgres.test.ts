@@ -58,15 +58,18 @@ describe('ThreadRepositoryPostgres', () => {
   })
 
   describe('getThreadById function', () => {
-    it('should return NotFoundError when thread is not found', async () => {
+    it('should reject when Thread does not exist', async () => {
       // Arrange doubles
       const fakeId = faker.datatype.uuid()
       const generateIdStub = (): string => fakeId
       const getCurrentTimeMock = createMock<() => string>()
 
-      // Action & assert
+      // Action
       const repository = new ThreadRepositoryPostgres(pool, generateIdStub, getCurrentTimeMock)
-      await expect(repository.getThreadById(`thread-${fakeId}`)).rejects.toThrowError(NotFoundError)
+      const promise = repository.getThreadById(`thread-${fakeId}`)
+
+      // Assert
+      await expect(promise).rejects.toThrowError('THREAD.NOT_FOUND')
     })
 
     it('should return thread when thread is found', async () => {

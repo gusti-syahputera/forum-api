@@ -1,6 +1,5 @@
 import { Pool } from 'pg'
 
-import InvariantError from '../../Commons/exceptions/InvariantError'
 import AuthenticationRepository from '../../Domains/authentications/AuthenticationRepository'
 
 export default class AuthenticationRepositoryPostgres implements AuthenticationRepository {
@@ -20,7 +19,7 @@ export default class AuthenticationRepositoryPostgres implements AuthenticationR
     })
 
     if (result.rows.length === 0) {
-      throw new InvariantError('refresh token tidak ditemukan di database')
+      throw new Error('REFRESH_TOKEN.NOT_FOUND')
     }
   }
 

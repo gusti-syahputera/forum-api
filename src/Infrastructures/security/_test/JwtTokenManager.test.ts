@@ -54,8 +54,7 @@ describe('JwtTokenManager', () => {
 
       // Action & Assert
       await expect(jwtTokenManager.verifyRefreshToken(accessToken))
-        .rejects
-        .toThrow(InvariantError)
+        .rejects.toThrow('AUTHENTICATION.INVALID_REFRESH_TOKEN')
     })
 
     it('should not throw InvariantError when refresh token verified', async () => {

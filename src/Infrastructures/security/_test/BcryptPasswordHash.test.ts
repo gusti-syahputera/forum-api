@@ -21,18 +21,17 @@ describe('BcryptEncryptionHelper', () => {
   })
 
   describe('comparePassword function', () => {
-    it('should throw AuthenticationError if password not match', async () => {
+    it('should reject if password does not match', async () => {
       // Arrange
       const bcryptEncryptionHelper = new BcryptEncryptionHelper(bcrypt)
 
       // Act & Assert
       await expect(bcryptEncryptionHelper
         .comparePassword('plain_password', 'encrypted_password'))
-        .rejects
-        .toThrow(AuthenticationError)
+        .rejects.toThrow('AUTHENTICATION.INVALID_CREDENTIALS')
     })
 
-    it('should not return AuthenticationError if password match', async () => {
+    it('should not reject if password matches', async () => {
       // Arrange
       const bcryptEncryptionHelper = new BcryptEncryptionHelper(bcrypt)
       const plainPassword = 'secret'
@@ -40,7 +39,7 @@ describe('BcryptEncryptionHelper', () => {
 
       // Act & Assert
       await expect(bcryptEncryptionHelper.comparePassword(plainPassword, encryptedPassword))
-        .resolves.not.toThrow(AuthenticationError)
+        .resolves.not.toThrow()
     })
   })
 })

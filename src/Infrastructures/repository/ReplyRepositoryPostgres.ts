@@ -1,6 +1,5 @@
 import { Pool } from 'pg'
 
-import { NotFoundError } from '../../Commons/exceptions'
 import ReplyRepository from '../../Domains/replies/ReplyRepository'
 import { AddedReply, CommentReply, NewReply, Reply } from '../../Domains/replies/entities'
 
@@ -33,7 +32,7 @@ export default class ReplyRepositoryPostgres implements ReplyRepository {
     })
 
     if (result.rowCount === 0) {
-      throw new NotFoundError('DELETE_REPLY.REPLY_NOT_FOUND')
+      throw new Error('DELETE_REPLY.REPLY_NOT_FOUND')
     }
   }
 
@@ -44,7 +43,7 @@ export default class ReplyRepositoryPostgres implements ReplyRepository {
     })
 
     if (result.rowCount === 0) {
-      throw new NotFoundError('REPLY.NOT_FOUND')
+      throw new Error('REPLY.NOT_FOUND')
     }
 
     return new Reply(Object.assign(result.rows[0]))

@@ -2,12 +2,17 @@ import * as faker from 'faker'
 import { createMock } from 'ts-auto-mock'
 import { method, On } from 'ts-auto-mock/extension'
 
-import { NotFoundError } from '../../../Commons/exceptions'
 import { Comment } from '../../../Domains/comments/entities'
 import CommentRepository from '../../../Domains/comments/CommentRepository'
 import DeleteCommentUseCase, { Payload } from '../DeleteCommentUseCase'
 import ThreadRepository from '../../../Domains/threads/ThreadRepository'
 import { Thread } from '../../../Domains/threads/entities'
+
+const generatePayload = (): Payload => ({
+  userId: `user-${faker.datatype.uuid()}`,
+  threadId: `thread-${faker.datatype.uuid()}`,
+  commentId: `comment-${faker.datatype.uuid()}`
+})
 
 const generateComment = (threadId = `thread-${faker.datatype.uuid()}`): Comment => new Comment({
   id: `comment-${faker.datatype.uuid()}`,
@@ -18,8 +23,8 @@ const generateComment = (threadId = `thread-${faker.datatype.uuid()}`): Comment 
   deleted_at: null
 })
 
-const generateThread = (id = `thread-${faker.datatype.uuid()}`): Thread => new Thread({
-  id,
+const generateThread = (): Thread => new Thread({
+  id: `thread-${faker.datatype.uuid()}`,
   title: faker.lorem.words(),
   body: faker.lorem.paragraphs(),
   username: faker.internet.userName(),
@@ -27,93 +32,78 @@ const generateThread = (id = `thread-${faker.datatype.uuid()}`): Thread => new T
 })
 
 describe('DeleteCommentUseCase', () => {
-  it('should reject when the thread does not exist', async () => {
-    // Arrange inputs
-    const useCasePayload: Payload = {
-      userId: `user-${faker.datatype.uuid()}`,
-      threadId: `thread-${faker.datatype.uuid()}`,
-      commentId: `comment-${faker.datatype.uuid()}`
-    }
-
+  it('should reject when the Thread does not exist', async () => {
     // Arrange doubles
-    const notFoundError = new NotFoundError()
     const threadRepository = createMock<ThreadRepository>()
     const threadRepositoryMocks = {
       getThreadById: On(threadRepository)
         .get(method(method => method.getThreadById))
-        .mockRejectedValue(notFoundError)
+        .mockRejectedValue(new Error('THREAD.NOT_FOUND'))
     }
     const commentRepository = createMock<CommentRepository>()
+
+    // Arrange inputs
+    const useCasePayload = generatePayload()
 
     // Action
     const useCase = new DeleteCommentUseCase(threadRepository, commentRepository)
     const promise = useCase.execute(useCasePayload)
 
     // Assert
-    await expect(promise).rejects.toThrowError(notFoundError)
+    await expect(promise).rejects.toThrowError('DELETE_COMMENT.THREAD_NOT_FOUND')
     expect(threadRepositoryMocks.getThreadById).toBeCalledWith(useCasePayload.threadId)
   })
 
-  it('should reject when the comment does not belong to the thread', async () => {
-    // Arrange inputs
-    const useCasePayload: Payload = {
-      userId: `user-${faker.datatype.uuid()}`,
-      threadId: `thread-${faker.datatype.uuid()}`,
-      commentId: `comment-${faker.datatype.uuid()}`
-    }
-
+  it('should reject when Comment does not belong to Thread', async () => {
     // Arrange doubles
-    const notFoundError = new NotFoundError('DELETE_COMMENT.COMMENT_DOES_NOT_BELONG_TO_THREAD')
     const commentRepository = createMock<CommentRepository>()
-
-    const thread = generateThread(useCasePayload.threadId)
+    const thread = generateThread()
     const threadRepository = createMock<ThreadRepository>()
     const threadRepositoryMocks = {
       getThreadById: On(threadRepository)
         .get(method(method => method.getThreadById))
         .mockResolvedValue(thread)
     }
+
+    // Arrange inputs
+    const useCasePayload = generatePayload()
+    useCasePayload.threadId = thread.id
 
     // Action
     const useCase = new DeleteCommentUseCase(threadRepository, commentRepository)
     const promise = useCase.execute(useCasePayload)
 
     // Assert
-    await expect(promise).rejects.toThrowError(notFoundError)
+    await expect(promise).rejects.toThrowError('DELETE_COMMENT.COMMENT_DOES_NOT_BELONG_TO_THREAD')
     expect(threadRepositoryMocks.getThreadById).toBeCalledWith(thread.id)
   })
 
-  it('should reject when the comment does not exist', async () => {
-    // Arrange inputs
-    const useCasePayload: Payload = {
-      userId: `user-${faker.datatype.uuid()}`,
-      threadId: `thread-${faker.datatype.uuid()}`,
-      commentId: `comment-${faker.datatype.uuid()}`
-    }
-
+  it('should reject when the Comment does not exist', async () => {
     // Arrange doubles
-    const thread = generateThread(useCasePayload.threadId)
+    const thread = generateThread()
     const threadRepository = createMock<ThreadRepository>()
     const threadRepositoryMocks = {
       getThreadById: On(threadRepository)
         .get(method(method => method.getThreadById))
         .mockResolvedValue(thread)
     }
-
-    const notFoundError = new NotFoundError()
     const commentRepository = createMock<CommentRepository>()
     const commentRepositoryMocks = {
       getCommentById: On(commentRepository)
         .get(method(method => method.getCommentById))
-        .mockRejectedValue(notFoundError)
+        .mockRejectedValue(new Error('COMMENT.NOT_FOUND'))
     }
+
+    // Arrange inputs
+    const useCasePayload = generatePayload()
+    useCasePayload.threadId = thread.id
 
     // Action
     const useCase = new DeleteCommentUseCase(threadRepository, commentRepository)
     const promise = useCase.execute(useCasePayload)
 
     // Assert
-    await expect(promise).rejects.toThrowError(notFoundError)
+    await expect(promise).rejects.toThrowError('DELETE_COMMENT.COMMENT_NOT_FOUND')
     expect(threadRepositoryMocks.getThreadById).toBeCalledWith(useCasePayload.threadId)
     expect(commentRepositoryMocks.getCommentById).toBeCalledWith(useCasePayload.commentId)
   })

@@ -1,6 +1,5 @@
 import { Pool } from 'pg'
 
-import { NotFoundError } from '../../Commons/exceptions'
 import ThreadRepository from '../../Domains/threads/ThreadRepository'
 import { NewThread, AddedThread, Thread } from '../../Domains/threads/entities'
 
@@ -35,7 +34,7 @@ export default class ThreadRepositoryPostgres implements ThreadRepository {
     })
 
     if (result.rowCount === 0) {
-      throw new NotFoundError('THREAD.NOT_FOUND')
+      throw new Error('THREAD.NOT_FOUND')
     }
 
     return new Thread({ ...result.rows[0] })

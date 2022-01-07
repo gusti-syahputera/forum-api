@@ -1,6 +1,5 @@
 import { Pool } from 'pg'
 
-import { NotFoundError } from '../../Commons/exceptions'
 import CommentRepository from '../../Domains/comments/CommentRepository'
 import { AddedComment, Comment, NewComment } from '../../Domains/comments/entities'
 import ThreadComment from '../../Domains/comments/entities/ThreadComment'
@@ -34,7 +33,7 @@ export default class CommentRepositoryPostgres implements CommentRepository {
     })
 
     if (result.rowCount === 0) {
-      throw new NotFoundError('DELETE_COMMENT.NOT_FOUND')
+      throw new Error('DELETE_COMMENT.NOT_FOUND')
     }
   }
 
@@ -45,7 +44,7 @@ export default class CommentRepositoryPostgres implements CommentRepository {
     })
 
     if (result.rowCount === 0) {
-      throw new NotFoundError('COMMENT.NOT_FOUND')
+      throw new Error('COMMENT.NOT_FOUND')
     }
 
     return new Comment(Object.assign(result.rows[0]))

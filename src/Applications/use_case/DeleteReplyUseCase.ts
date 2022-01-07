@@ -1,4 +1,3 @@
-import { AuthorizationError } from '../../Commons/exceptions'
 import ThreadRepository from '../../Domains/threads/ThreadRepository'
 import CommentRepository from '../../Domains/comments/CommentRepository'
 import ReplyRepository from '../../Domains/replies/ReplyRepository'
@@ -35,7 +34,7 @@ export default class DeleteReplyUseCase {
 
     // Assert that user is the reply's owner
     if (reply.owner !== userId) {
-      throw new AuthorizationError('DELETE_REPLY.USER_IS_NOT_OWNER')
+      throw new Error('DELETE_REPLY.USER_IS_NOT_OWNER')
     }
 
     // Proceed to delete
