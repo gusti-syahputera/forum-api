@@ -26,6 +26,7 @@ import AddThreadUseCase from '../Applications/use_case/AddThreadUseCase'
 import AddCommentUseCase from '../Applications/use_case/AddCommentUseCase'
 import DeleteCommentUseCase from '../Applications/use_case/DeleteCommentUseCase'
 import CommentRepositoryPostgres from './repository/CommentRepositoryPostgres'
+import GetThreadWithCommentsUseCase from '../Applications/use_case/GetThreadWithCommentsUseCase'
 
 /* eslint-disable symbol-description */
 export const tokens = {
@@ -36,6 +37,7 @@ export const tokens = {
   bcrypt: Symbol(),
   saltRound: Symbol(),
   jwt: Symbol(),
+  deletedCommentContentMask: Symbol(),
   UserRepository: Symbol(),
   PasswordHash: Symbol(),
   AuthenticationRepository: Symbol(),
@@ -55,6 +57,7 @@ container.register(t.getCurrentTime, { useValue: () => new Date().toISOString() 
 container.register(t.bcrypt, { useValue: bcrypt })
 container.register(t.saltRound, { useValue: 10 })
 container.register(t.jwt, { useValue: Jwt.token })
+container.register(t.deletedCommentContentMask, { useValue: '**komentar telah dihapus**' })
 
 /* Registering use case class' factories */
 
@@ -130,5 +133,10 @@ container.register(DeleteCommentUseCase, {
   )
 })
 
+container.register(GetThreadWithCommentsUseCase, {
+  useFactory: (c) => new GetThreadWithCommentsUseCase(
+    c.resolve(t.ThreadsRepository), c.resolve(t.CommentsRepository), c.resolve(t.deletedCommentContentMask)
+  )
+})
 const container_: IocContainer = container
 export default container_

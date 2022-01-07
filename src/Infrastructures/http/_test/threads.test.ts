@@ -4,16 +4,20 @@ import pool from '../../database/postgres/pool'
 import UsersTableTestHelper from '../../../Commons/tests/UsersTableTestHelper'
 import ThreadsTableTestHelper from '../../../Commons/tests/ThreadsTableTestHelper'
 import AuthenticationsTableTestHelper from '../../../Commons/tests/AuthenticationsTableTestHelper'
+import CommentsTableTestHelper from '../../../Commons/tests/CommentsTableTestHelper'
 import AuthHelper from '../../../Commons/tests/AuthenticationTestHelper'
 import container from '../../tsyringeContainer'
 import createServer from '../createServer'
 
 describe('/threads endpoints', () => {
-  afterEach(async () => await Promise.all([
-    UsersTableTestHelper.cleanTable(),
-    AuthenticationsTableTestHelper.cleanTable(),
-    ThreadsTableTestHelper.cleanTable()
-  ]))
+  afterEach(async () => {
+    await CommentsTableTestHelper.cleanTable()
+    await ThreadsTableTestHelper.cleanTable()
+    await Promise.all([
+      AuthenticationsTableTestHelper.cleanTable(),
+      UsersTableTestHelper.cleanTable()
+    ])
+  })
 
   afterAll(async () => await pool.end())
 
@@ -111,6 +115,66 @@ describe('/threads endpoints', () => {
       expect(response.statusCode).toEqual(400)
       expect(responseJson.status).toEqual('fail')
       expect(responseJson.message).toEqual('tidak dapat membuat thread baru karena tipe data tidak sesuai')
+    })
+  })
+
+  describe('when GET /threads/{threadId}', () => {
+    it('should return 404 response when the thread does not exist', async () => {
+      // Arrange
+      const randomId = 'thread-faker.datatype.uuid()'
+
+      // Action
+      const server = await createServer(container)
+      const response = await server.inject({
+        method: 'GET',
+        url: `/threads/${randomId}`
+      })
+
+      // Assert
+      const responseJson = JSON.parse(response.payload)
+      expect(response.statusCode).toEqual(404)
+      expect(responseJson.status).toEqual('fail')
+      expect(responseJson.message).toEqual('thread tidak ada')
+    })
+
+    it('should return 200 response', async () => {
+      // Arrange User & Thread
+      const usersData = await Promise.all([...Array(10).keys()].map(
+        async () => await UsersTableTestHelper.addUser({})
+      ))
+      const thread = await ThreadsTableTestHelper.addThread({
+        owner: faker.random.arrayElement(usersData).id
+      })
+
+      // Arrange Comments
+      const commentCounts = 50
+      await Promise.all([...Array(commentCounts).keys()].map(
+        async () => await CommentsTableTestHelper.addComment({
+          thread_id: thread.id,
+          owner: faker.random.arrayElement(usersData).id
+        })
+      ))
+
+      // Action
+      const server = await createServer(container)
+      const response = await server.inject({
+        method: 'GET',
+        url: `/threads/${thread.id}`
+      })
+
+      // Assert
+      const responseJson = JSON.parse(response.payload)
+      expect(response.statusCode).toEqual(200)
+      expect(responseJson.status).toEqual('success')
+      expect(responseJson.data).toBeDefined()
+      expect(responseJson.data.thread).toBeDefined()
+      expect(responseJson.data.thread.id).toBeDefined()
+      expect(responseJson.data.thread.title).toBeDefined()
+      expect(responseJson.data.thread.body).toBeDefined()
+      expect(responseJson.data.thread.date).toBeDefined()
+      expect(responseJson.data.thread.username).toBeDefined()
+      expect(responseJson.data.thread.comments).toBeDefined()
+      expect(responseJson.data.thread.comments).toHaveLength(commentCounts)
     })
   })
 })

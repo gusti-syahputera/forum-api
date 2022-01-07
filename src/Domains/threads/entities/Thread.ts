@@ -1,9 +1,9 @@
-export default class Thread {
+export default class Thread<Comment = any> {
     id: string
     body: string
     title: string
     username: string
-    comments?: []
+    comments?: Comment[]
     date: string
 
     constructor (payload) {

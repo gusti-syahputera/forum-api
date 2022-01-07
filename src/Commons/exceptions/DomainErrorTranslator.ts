@@ -18,6 +18,7 @@ export default class DomainErrorTranslator {
     // Threads
     'NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat thread baru karena properti yang dibutuhkan tidak ada'),
     'NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat thread baru karena tipe data tidak sesuai'),
+    'THREAD.NOT_FOUND': new NotFoundError('thread tidak ada'),
 
     // Comments
     'NEW_COMMENT.THREAD_NOT_FOUND': new NotFoundError('tidak dapat membuat comment baru karena thread tidak ada'),
