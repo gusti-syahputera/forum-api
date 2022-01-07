@@ -1,5 +1,4 @@
-import { AddedComment, Comment, NewComment } from './entities'
-import ThreadComment from './entities/ThreadComment'
+import { AddedComment, Comment, NewComment, ThreadComment } from './entities'
 
 export default interface CommentRepository {
   addComment: (newComment: NewComment) => Promise<AddedComment>

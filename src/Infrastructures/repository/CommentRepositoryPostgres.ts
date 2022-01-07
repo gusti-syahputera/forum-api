@@ -1,8 +1,7 @@
 import { Pool } from 'pg'
 
 import CommentRepository from '../../Domains/comments/CommentRepository'
-import { AddedComment, Comment, NewComment } from '../../Domains/comments/entities'
-import ThreadComment from '../../Domains/comments/entities/ThreadComment'
+import { AddedComment, Comment, NewComment, ThreadComment } from '../../Domains/comments/entities'
 
 export default class CommentRepositoryPostgres implements CommentRepository {
   constructor (
