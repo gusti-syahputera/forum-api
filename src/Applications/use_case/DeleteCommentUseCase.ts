@@ -1,7 +1,6 @@
 import { AuthorizationError, InvariantError, NotFoundError } from '../../Commons/exceptions'
 import ThreadRepository from '../../Domains/threads/ThreadRepository'
 import CommentRepository from '../../Domains/comments/CommentRepository'
-import { Comment } from '../../Domains/comments/entities'
 
 export interface Payload {
   userId: string
