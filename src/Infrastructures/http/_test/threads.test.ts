@@ -139,7 +139,7 @@ describe('/threads endpoints', () => {
 
     it('should return 200 response', async () => {
       // Arrange User & Thread
-      const usersData = await Promise.all([...Array(10).keys()].map(
+      const usersData = await Promise.all([...Array(3).keys()].map(
         async () => await UsersTableTestHelper.addUser({})
       ))
       const thread = await ThreadsTableTestHelper.addThread({
@@ -147,7 +147,7 @@ describe('/threads endpoints', () => {
       })
 
       // Arrange Comments
-      const commentCounts = 50
+      const commentCounts = 5
       await Promise.all([...Array(commentCounts).keys()].map(
         async () => await CommentsTableTestHelper.addComment({
           thread_id: thread.id,
