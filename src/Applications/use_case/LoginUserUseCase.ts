@@ -1,5 +1,5 @@
 import { UserLogin } from '../../Domains/users/entities'
-import NewAuthentication from '../../Domains/authentications/entities/NewAuth'
+import { NewAuth } from '../../Domains/authentications/entities'
 import UserRepository from '../../Domains/users/UserRepository'
 import AuthenticationRepository from '../../Domains/authentications/AuthenticationRepository'
 import AuthenticationTokenManager from '../security/AuthenticationTokenManager'
@@ -14,7 +14,7 @@ export default class LoginUserUseCase {
   ) {
   }
 
-  async execute (useCasePayload): Promise<NewAuthentication> {
+  async execute (useCasePayload): Promise<NewAuth> {
     const { username, password } = new UserLogin(useCasePayload)
 
     const encryptedPassword = await this.userRepository.getPasswordByUsername(username)
@@ -26,7 +26,7 @@ export default class LoginUserUseCase {
     const accessToken = await this.authenticationTokenManager.createAccessToken({ username, sub: id })
     const refreshToken = await this.authenticationTokenManager.createRefreshToken({ username, sub: id })
 
-    const newAuthentication = new NewAuthentication({ accessToken, refreshToken })
+    const newAuthentication = new NewAuth({ accessToken, refreshToken })
 
     await this.authenticationRepository.addToken(newAuthentication.refreshToken)
 
