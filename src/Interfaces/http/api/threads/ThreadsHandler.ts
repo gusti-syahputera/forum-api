@@ -1,4 +1,4 @@
-import IocContainer from '../../../../Commons/IocContainer'
+import IocContainer from '../../../IocContainer'
 import ResponseRenderer from '../../ResponseRenderer'
 import { Request, ResponseObject, ResponseToolkit } from '@hapi/hapi'
 import AddThreadUseCase from '../../../../Applications/use_case/AddThreadUseCase'

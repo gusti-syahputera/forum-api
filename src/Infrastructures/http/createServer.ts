@@ -1,6 +1,6 @@
 import * as Hapi from '@hapi/hapi'
 
-import IocContainer from '../../Commons/IocContainer'
+import IocContainer from '../../Interfaces/IocContainer'
 import ResponseRenderer from '../../Interfaces/http/ResponseRenderer'
 
 /* Plugins */

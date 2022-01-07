@@ -1,5 +1,5 @@
 import createServer from '../createServer'
-import IocContainer from '../../../Commons/IocContainer'
+import IocContainer from '../../../Interfaces/IocContainer'
 
 const getContainerMock = (): IocContainer => ({
   resolve: <T>(Token): T => new Token()

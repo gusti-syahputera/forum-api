@@ -1,6 +1,6 @@
 import { Plugin, Server, ServerRegisterPluginObject as PluginObject } from '@hapi/hapi'
 
-import IocContainer from '../../../../Commons/IocContainer'
+import IocContainer from '../../../IocContainer'
 
 import routes from './routes'
 import CommentsHandler from './CommentsHandler'

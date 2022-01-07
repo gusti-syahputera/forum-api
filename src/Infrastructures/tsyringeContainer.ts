@@ -2,7 +2,7 @@
 
 import { container } from 'tsyringe'
 
-import IocContainer from '../Commons/IocContainer'
+import IocContainer from '../Interfaces/IocContainer'
 
 // External dependencies
 import { nanoid } from 'nanoid'

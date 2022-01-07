@@ -1,6 +1,6 @@
 import { Request, ResponseToolkit, ResponseObject } from '@hapi/hapi'
 
-import IocContainer from '../../../../Commons/IocContainer'
+import IocContainer from '../../../IocContainer'
 import AddUserUseCase from '../../../../Applications/use_case/AddUserUseCase'
 import ResponseRenderer from '../../ResponseRenderer'
 
