@@ -3,6 +3,7 @@ import { Pool } from 'pg'
 import { NotFoundError } from '../../Commons/exceptions'
 import CommentRepository from '../../Domains/comments/CommentRepository'
 import { AddedComment, Comment, NewComment } from '../../Domains/comments/entities'
+import ThreadComment from '../../Domains/comments/entities/ThreadComment'
 
 export default class CommentRepositoryPostgres implements CommentRepository {
   constructor (
@@ -48,5 +49,22 @@ export default class CommentRepositoryPostgres implements CommentRepository {
     }
 
     return new Comment(Object.assign(result.rows[0]))
+  }
+
+  getCommentsByThreadId = async (threadId: string): Promise<ThreadComment[]> => {
+    const result = await this.pool.query({
+      text: `
+          SELECT comments.id,
+                 users.username,
+                 comments.date,
+                 comments.content,
+                 comments.deleted_at
+          FROM comments
+                   INNER JOIN users ON comments.owner = users.id
+          WHERE comments.thread_id = $1
+          ORDER BY comments.date`,
+      values: [threadId]
+    })
+    return result.rows.map(row => new ThreadComment(row))
   }
 }
