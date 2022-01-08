@@ -16,7 +16,6 @@ import BcryptPasswordHash from './security/BcryptPasswordHash'
 import JwtTokenManager from './security/JwtTokenManager'
 import AuthenticationRepositoryPostgres from './repository/AuthenticationRepositoryPostgres'
 
-import DeleteAuthenticationUseCase from '../Applications/use_case/DeleteAuthenticationUseCase'
 import AddUserUseCase from '../Applications/use_case/AddUserUseCase'
 import LoginUserUseCase from '../Applications/use_case/LoginUserUseCase'
 import LogoutUserUseCase from '../Applications/use_case/LogoutUserUseCase'
@@ -124,10 +123,6 @@ container.register(RefreshAuthenticationUseCase, {
     c.resolve(t.AuthenticationRepository),
     c.resolve(t.AuthenticationTokenManager)
   )
-})
-
-container.register(DeleteAuthenticationUseCase, {
-  useFactory: (c) => new DeleteAuthenticationUseCase(c.resolve(t.AuthenticationRepository))
 })
 
 container.register(AddThreadUseCase, {
