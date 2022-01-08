@@ -4,6 +4,7 @@
   "description": "Submisi Proyek Automation Testing dan Clean Architecture",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "node dist/app.js",
     "start:dev": "nodemon src/app.ts",
     "test": "jest --setupFiles dotenv/config -i",
