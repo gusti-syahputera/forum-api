@@ -2,22 +2,34 @@ import * as faker from 'faker'
 import { createMock } from 'ts-auto-mock'
 import { method, On } from 'ts-auto-mock/extension'
 
-import { Comment } from '../../../Domains/comments/entities'
+import { ThreadComment } from '../../../Domains/comments/entities'
 import { Thread } from '../../../Domains/threads/entities'
 import CommentRepository from '../../../Domains/comments/CommentRepository'
 import ThreadRepository from '../../../Domains/threads/ThreadRepository'
 import GetThreadWithCommentsUseCase, { Payload } from '../GetThreadWithCommentsUseCase'
+import { CommentReply } from '../../../Domains/replies/entities'
 
 describe('GetThreadWithCommentsUseCase', () => {
+  it('should construct correctly', async () => {
+    // Arrange
+    const threadRepository = createMock<ThreadRepository>()
+    const commentRepository = createMock<CommentRepository>()
+    const customDeletedCommentMask = '**komen dihapus**'
+
+    // Action and Assert
+    expect(() => new GetThreadWithCommentsUseCase(threadRepository, commentRepository)).not.toThrow()
+    expect(() => new GetThreadWithCommentsUseCase(threadRepository, commentRepository, customDeletedCommentMask))
+      .not.toThrow()
+  })
+
   it('should orchestrate the thread getting action correctly', async () => {
     // Arrange inputs
     const useCasePayload: Payload = {
       threadId: `thread-${faker.datatype.uuid()}`
     }
 
-    // Arrange doubles
-
-    const thread = new Thread<Comment>({
+    // Arrange Thread-related doubles
+    const thread = new Thread<ThreadComment>({
       id: useCasePayload.threadId,
       body: faker.lorem.paragraphs(),
       title: faker.lorem.words(),
@@ -32,10 +44,11 @@ describe('GetThreadWithCommentsUseCase', () => {
         .mockResolvedValue(thread)
     }
 
-    const comments = [...Array(10).keys()].map<Comment>(_ => new Comment({
+    // Arrange Comment-related doubles
+    const threadComments = [...Array(4).keys()].map(() => new ThreadComment({
       id: `comment-${faker.datatype.uuid()}`,
       thread_id: thread.id,
-      owner: `user-${faker.datatype.uuid()}`,
+      username: faker.internet.userName(),
       content: faker.lorem.paragraphs(),
       date: faker.datatype.datetime().toISOString(),
       deleted_at: faker.random.arrayElement([faker.datatype.datetime().toISOString(), null])
@@ -44,20 +57,20 @@ describe('GetThreadWithCommentsUseCase', () => {
     const commentRepositoryMocks = {
       getCommentsByThreadId: On(commentRepository)
         .get(method(method => method.getCommentsByThreadId))
-        .mockResolvedValue(comments)
+        .mockResolvedValue(threadComments)
     }
 
     // Arrange expectations
     const deletedCommentContentMask = '**deleted comment**'
-    const expectedComments = JSON.parse(JSON.stringify(comments))
-    expectedComments.forEach(comment => {
+    const _threadComments = threadComments.map(threadComment => Object.assign({}, threadComment) as ThreadComment<CommentReply>)
+    _threadComments.forEach(comment => {
       if (comment.deleted_at !== null) {
         comment.content = deletedCommentContentMask
       }
       comment.deleted_at = undefined
     })
-    const expectedThread = Object.assign(thread) as Thread<Comment>
-    expectedThread.comments = expectedComments
+    const expectedThread = Object.assign({}, thread)
+    expectedThread.comments = _threadComments
 
     // Action
     const useCase = new GetThreadWithCommentsUseCase(threadRepository, commentRepository, deletedCommentContentMask)
@@ -66,7 +79,7 @@ describe('GetThreadWithCommentsUseCase', () => {
     // Assert
     await Promise.all([
       expect(promise).resolves.toMatchObject(expectedThread),
-      expect(promise).resolves.toEqual(expect.objectContaining({ comments: expectedComments }))
+      expect(promise).resolves.toEqual(expect.objectContaining({ comments: expectedThread.comments }))
     ])
     expect(threadRepositoryMocks.getThreadById).toBeCalledWith(useCasePayload.threadId)
     expect(commentRepositoryMocks.getCommentsByThreadId).toBeCalledWith(useCasePayload.threadId)
