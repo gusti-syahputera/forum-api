@@ -56,14 +56,14 @@ describe('AddCommentUseCase', () => {
     }
 
     // Arrange
-    const expectedAddedComment = Object.assign(addedComment)
+    const expectedAddedComment = Object.assign({}, addedComment)
 
     // Action
     const useCase = new AddCommentUseCase(threadRepository, commentRepository)
     const promise = useCase.execute(useCasePayload)
 
     // Assert
-    await expect(promise).resolves.toStrictEqual(expectedAddedComment)
+    await expect(promise).resolves.toMatchObject(expectedAddedComment)
     expect(commentRepositoryMocks.addComment).toBeCalledWith(newComment)
   })
 })

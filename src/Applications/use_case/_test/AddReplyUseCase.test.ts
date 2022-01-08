@@ -90,14 +90,14 @@ describe('AddReplyUseCase', () => {
     const threadRepository = createMock<ThreadRepository>()
 
     // Arrange
-    const expectedAddedReply = Object.assign(addedReply)
+    const expectedAddedReply = Object.assign({}, addedReply)
 
     // Action
     const useCase = new AddReplyUseCase(threadRepository, commentRepository, replyRepository)
     const promise = useCase.execute(useCasePayload)
 
     // Assert
-    await expect(promise).resolves.toStrictEqual(expectedAddedReply)
+    await expect(promise).resolves.toMatchObject(expectedAddedReply)
     expect(replyRepositoryMocks.addReply).toBeCalledWith(newReply)
   })
 })
