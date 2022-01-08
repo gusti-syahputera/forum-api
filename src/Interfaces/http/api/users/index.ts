@@ -3,7 +3,7 @@ import { Plugin, Server, ServerRegisterPluginObject as PluginObject } from '@hap
 import IocContainer from '../../../IocContainer'
 
 import routes from './routes'
-import UsersHandler from './handler'
+import UsersHandler from './UsersHandler'
 import ResponseRenderer from '../../ResponseRenderer'
 
 export interface Options {

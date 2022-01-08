@@ -1,6 +1,6 @@
 import { ServerRoute } from '@hapi/hapi'
 
-import UsersHandler from './handler'
+import UsersHandler from './UsersHandler'
 
 export default (handler: UsersHandler): ServerRoute[] => ([
   {
