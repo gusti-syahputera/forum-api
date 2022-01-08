@@ -1,6 +1,6 @@
 import { ServerRoute } from '@hapi/hapi'
 
-import AuthenticationsHandler from './handler'
+import AuthenticationsHandler from './AuthenticationsHandler'
 
 export default (handler: AuthenticationsHandler): ServerRoute[] => ([
   {

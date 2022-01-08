@@ -4,12 +4,13 @@
   "description": "Submisi Proyek Automation Testing dan Clean Architecture",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "node dist/app.js",
     "start:dev": "nodemon src/app.ts",
     "test": "jest --setupFiles dotenv/config -i",
     "test:watch:change": "jest --watch --setupFiles dotenv/config -i",
     "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config -i",
-    "migrate": "node-pg-migrate -f config/database/local.json",
+    "migrate": "node-pg-migrate",
     "migrate:test": "node-pg-migrate -f config/database/test.json"
   },
   "author": "Gusti Ridhoni Syahputera",
