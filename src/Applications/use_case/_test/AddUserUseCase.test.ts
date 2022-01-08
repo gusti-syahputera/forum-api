@@ -1,53 +1,63 @@
+import * as faker from 'faker'
+import { createMock } from 'ts-auto-mock'
+import { method, On } from 'ts-auto-mock/extension'
+
 import { RegisterUser, RegisteredUser } from '../../../Domains/users/entities'
 import UserRepository from '../../../Domains/users/UserRepository'
 import PasswordHash from '../../security/PasswordHash'
 import AddUserUseCase from '../AddUserUseCase'
-
-const instantAsyncFunc = async (): Promise<any> => await Promise.resolve()
 
 describe('AddUserUseCase', () => {
   /**
    * Menguji apakah use case mampu mengoskestrasikan langkah demi langkah dengan benar.
    */
   it('should orchestrating the add user action correctly', async () => {
-    // Arrange
+    // Arrange inputs
     const useCasePayload = {
-      username: 'dicoding',
-      password: 'secret',
-      fullname: 'Dicoding Indonesia'
+      username: faker.internet.userName(),
+      password: faker.internet.password(),
+      fullname: faker.name.findName()
     }
-    const expectedRegisteredUser = new RegisteredUser({
-      id: 'user-123',
+
+    // Arrange doubles
+    const registeredUser = new RegisteredUser({
+      id: `user-${faker.datatype.uuid()}`,
       username: useCasePayload.username,
       fullname: useCasePayload.fullname
     })
-
-    /** creating mocked dependency of use case */
-    const mockUserRepository: UserRepository = {
-      verifyAvailableUsername: jest.fn().mockImplementation(instantAsyncFunc),
-      addUser: jest.fn().mockImplementation(async () => expectedRegisteredUser),
-      getPasswordByUsername: jest.fn().mockImplementation(instantAsyncFunc),
-      getIdByUsername: jest.fn().mockImplementation(instantAsyncFunc)
+    const userRepository = createMock<UserRepository>()
+    const userRepositoryMocks = {
+      verifyAvailableUsername: On(userRepository)
+        .get(method('verifyAvailableUsername'))
+        .mockImplementation(async () => await Promise.resolve()),
+      addUser: On(userRepository)
+        .get(method('addUser'))
+        .mockResolvedValue(registeredUser)
     }
-    const mockPasswordHash: PasswordHash = {
-      hash: jest.fn().mockImplementation(async () => 'encrypted_password'),
-      comparePassword: jest.fn().mockImplementation(instantAsyncFunc)
+    const hashedPassword = faker.datatype.hexaDecimal(64)
+    const passwordHash = createMock<PasswordHash>()
+    const passwordHashMocks = {
+      hash: On(passwordHash)
+        .get(method(method => method.hash))
+        .mockResolvedValue(hashedPassword)
     }
-
-    /** creating use case instance */
-    const getUserUseCase = new AddUserUseCase(mockUserRepository, mockPasswordHash)
 
     // Action
-    const registeredUser = await getUserUseCase.execute(useCasePayload)
+    const getUserUseCase = new AddUserUseCase(userRepository, passwordHash)
+    const promise = getUserUseCase.execute(useCasePayload)
 
     // Assert
-    expect(registeredUser).toStrictEqual(expectedRegisteredUser)
-    expect(mockUserRepository.verifyAvailableUsername).toBeCalledWith(useCasePayload.username)
-    expect(mockPasswordHash.hash).toBeCalledWith(useCasePayload.password)
-    expect(mockUserRepository.addUser).toBeCalledWith(new RegisterUser({
+
+    const expectedRegisteredUser = Object.assign({}, registeredUser)
+    await expect(promise).resolves.toMatchObject(expectedRegisteredUser)
+    expect(userRepositoryMocks.verifyAvailableUsername).toBeCalledWith(useCasePayload.username)
+    expect(passwordHashMocks.hash).toBeCalledWith(useCasePayload.password)
+
+    const expectedRegisterUser = new RegisterUser({
       username: useCasePayload.username,
-      password: 'encrypted_password',
+      password: hashedPassword,
       fullname: useCasePayload.fullname
-    }))
+    })
+    expect(userRepositoryMocks.addUser).toBeCalledWith(expectedRegisterUser)
   })
 })
