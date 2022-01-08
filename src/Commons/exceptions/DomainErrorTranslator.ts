@@ -41,7 +41,7 @@ export default class DomainErrorTranslator {
 
     // Replies
     'NEW_REPLY.THREAD_NOT_FOUND': new NotFoundError('tidak dapat membuat reply baru karena thread tidak ada'),
-    'NEW_REPLY.COMMENT_NOT_FOUND': new NotFoundError('tidak dapat membuat reply baru karena comment tidak'),
+    'NEW_REPLY.COMMENT_NOT_FOUND': new NotFoundError('tidak dapat membuat reply baru karena comment tidak ada'),
     'NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat reply baru karena properti yang dibutuhkan tidak ada'),
     'NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat reply baru karena tipe data tidak sesuai'),
     'DELETE_REPLY.THREAD_NOT_FOUND': new NotFoundError('tidak dapat menghapus reply karena thread tidak ada'),
