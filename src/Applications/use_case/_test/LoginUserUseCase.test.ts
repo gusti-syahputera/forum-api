@@ -1,9 +1,9 @@
+import { NewAuth } from '../../../Domains/authentications/entities'
 import UserRepository from '../../../Domains/users/UserRepository'
 import AuthenticationRepository from '../../../Domains/authentications/AuthenticationRepository'
 import AuthenticationTokenManager from '../../security/AuthenticationTokenManager'
 import PasswordHash from '../../security/PasswordHash'
 import LoginUserUseCase from '../LoginUserUseCase'
-import NewAuth from '../../../Domains/authentications/entities/NewAuth'
 
 const instantAsyncFunc = async (): Promise<any> => await Promise.resolve()
 

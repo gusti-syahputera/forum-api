@@ -1,4 +1,3 @@
-import { NotFoundError } from '../../Commons/exceptions'
 import ThreadRepository from '../../Domains/threads/ThreadRepository'
 import CommentRepository from '../../Domains/comments/CommentRepository'
 import { AddedComment, NewComment } from '../../Domains/comments/entities'
@@ -25,7 +24,7 @@ export default class AddCommentUseCase {
     try {
       await this.threadRepository.getThreadById(threadId)
     } catch (e) {
-      if (e instanceof NotFoundError) {
+      if (e.message === 'THREAD.NOT_FOUND') {
         e.message = 'NEW_COMMENT.THREAD_NOT_FOUND'
       }
       throw e

@@ -1,6 +1,6 @@
 import * as Hapi from '@hapi/hapi'
 
-import IocContainer from '../../Commons/IocContainer'
+import IocContainer from '../../Interfaces/IocContainer'
 import ResponseRenderer from '../../Interfaces/http/ResponseRenderer'
 
 /* Plugins */
@@ -9,6 +9,7 @@ import registerUsersPlugin from '../../Interfaces/http/api/users'
 import registerAuthenticationsPlugin from '../../Interfaces/http/api/authentications'
 import registerThreadsPlugin from '../../Interfaces/http/api/threads'
 import registerCommentsPlugin from '../../Interfaces/http/api/comments'
+import registerReplyPlugin from '../../Interfaces/http/api/replies'
 import registerErrorRenderer from '../../Interfaces/http/errorRenderer'
 
 export default async function createServer (
@@ -30,7 +31,8 @@ export default async function createServer (
     registerUsersPlugin(server, container, renderer),
     registerAuthenticationsPlugin(server, container, renderer),
     registerThreadsPlugin(server, container, renderer, authStrategyName),
-    registerCommentsPlugin(server, container, renderer, authStrategyName)
+    registerCommentsPlugin(server, container, renderer, authStrategyName),
+    registerReplyPlugin(server, container, renderer, authStrategyName)
   ])
 
   return server

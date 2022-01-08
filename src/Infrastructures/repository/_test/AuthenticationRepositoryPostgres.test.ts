@@ -24,17 +24,17 @@ describe('AuthenticationRepository postgres', () => {
   })
 
   describe('checkAvailabilityToken function', () => {
-    it('should throw InvariantError if token not available', async () => {
+    it('should reject if token not available', async () => {
       // Arrange
       const authenticationRepository = new AuthenticationRepositoryPostgres(pool)
       const token = 'token'
 
       // Action & Assert
       await expect(authenticationRepository.checkAvailabilityToken(token))
-        .rejects.toThrow(InvariantError)
+        .rejects.toThrow('REFRESH_TOKEN.NOT_FOUND')
     })
 
-    it('should not throw InvariantError if token available', async () => {
+    it('should not reject if token available', async () => {
       // Arrange
       const authenticationRepository = new AuthenticationRepositoryPostgres(pool)
       const token = 'token'
@@ -42,7 +42,7 @@ describe('AuthenticationRepository postgres', () => {
 
       // Action & Assert
       await expect(authenticationRepository.checkAvailabilityToken(token))
-        .resolves.not.toThrow(InvariantError)
+        .resolves.not.toThrow()
     })
   })
 

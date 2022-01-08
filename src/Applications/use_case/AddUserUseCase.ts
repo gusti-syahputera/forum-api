@@ -1,7 +1,6 @@
 import UserRepository from '../../Domains/users/UserRepository'
 import PasswordHash from '../security/PasswordHash'
-import RegisterUser from '../../Domains/users/entities/RegisterUser'
-import RegisteredUser from '../../Domains/users/entities/RegisteredUser'
+import { RegisterUser, RegisteredUser } from '../../Domains/users/entities'
 
 export default class AddUserUseCase {
   constructor (

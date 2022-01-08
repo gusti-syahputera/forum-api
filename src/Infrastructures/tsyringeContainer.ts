@@ -2,7 +2,7 @@
 
 import { container } from 'tsyringe'
 
-import IocContainer from '../Commons/IocContainer'
+import IocContainer from '../Interfaces/IocContainer'
 
 // External dependencies
 import { nanoid } from 'nanoid'
@@ -26,7 +26,11 @@ import AddThreadUseCase from '../Applications/use_case/AddThreadUseCase'
 import AddCommentUseCase from '../Applications/use_case/AddCommentUseCase'
 import DeleteCommentUseCase from '../Applications/use_case/DeleteCommentUseCase'
 import CommentRepositoryPostgres from './repository/CommentRepositoryPostgres'
+import ReplyRepositoryPostgres from './repository/ReplyRepositoryPostgres'
 import GetThreadWithCommentsUseCase from '../Applications/use_case/GetThreadWithCommentsUseCase'
+import GetThreadWithCommentsAndRepliesUseCase from '../Applications/use_case/GetThreadWithCommentsAndRepliesUseCase'
+import AddReplyUseCase from '../Applications/use_case/AddReplyUseCase'
+import DeleteReplyUseCase from '../Applications/use_case/DeleteReplyUseCase'
 
 /* eslint-disable symbol-description */
 export const tokens = {
@@ -38,12 +42,14 @@ export const tokens = {
   saltRound: Symbol(),
   jwt: Symbol(),
   deletedCommentContentMask: Symbol(),
+  deletedReplyContentMask: Symbol(),
   UserRepository: Symbol(),
   PasswordHash: Symbol(),
   AuthenticationRepository: Symbol(),
   AuthenticationTokenManager: Symbol(),
   ThreadsRepository: Symbol(),
-  CommentsRepository: Symbol()
+  CommentsRepository: Symbol(),
+  ReplyRepository: Symbol()
 }
 /* eslint-enable symbol-description */
 const t = tokens
@@ -58,6 +64,7 @@ container.register(t.bcrypt, { useValue: bcrypt })
 container.register(t.saltRound, { useValue: 10 })
 container.register(t.jwt, { useValue: Jwt.token })
 container.register(t.deletedCommentContentMask, { useValue: '**komentar telah dihapus**' })
+container.register(t.deletedReplyContentMask, { useValue: '**balasan telah dihapus**' })
 
 /* Registering use case class' factories */
 
@@ -85,6 +92,12 @@ container.register(t.ThreadsRepository, {
 
 container.register(t.CommentsRepository, {
   useFactory: (c) => new CommentRepositoryPostgres(
+    c.resolve(t.pool), c.resolve(t.generateId), c.resolve(t.getCurrentTime)
+  )
+})
+
+container.register(t.ReplyRepository, {
+  useFactory: (c) => new ReplyRepositoryPostgres(
     c.resolve(t.pool), c.resolve(t.generateId), c.resolve(t.getCurrentTime)
   )
 })
@@ -138,5 +151,32 @@ container.register(GetThreadWithCommentsUseCase, {
     c.resolve(t.ThreadsRepository), c.resolve(t.CommentsRepository), c.resolve(t.deletedCommentContentMask)
   )
 })
+
+container.register(GetThreadWithCommentsAndRepliesUseCase, {
+  useFactory: (c) => new GetThreadWithCommentsAndRepliesUseCase(
+    c.resolve(t.ThreadsRepository),
+    c.resolve(t.CommentsRepository),
+    c.resolve(t.ReplyRepository),
+    c.resolve(t.deletedCommentContentMask),
+    c.resolve(t.deletedReplyContentMask)
+  )
+})
+
+container.register(AddReplyUseCase, {
+  useFactory: (c) => new AddReplyUseCase(
+    c.resolve(t.ThreadsRepository),
+    c.resolve(t.CommentsRepository),
+    c.resolve(t.ReplyRepository)
+  )
+})
+
+container.register(DeleteReplyUseCase, {
+  useFactory: (c) => new DeleteReplyUseCase(
+    c.resolve(t.ThreadsRepository),
+    c.resolve(t.CommentsRepository),
+    c.resolve(t.ReplyRepository)
+  )
+})
+
 const container_: IocContainer = container
 export default container_

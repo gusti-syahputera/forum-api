@@ -1,10 +1,10 @@
-import IocContainer from '../../../../Commons/IocContainer'
+import IocContainer from '../../../IocContainer'
 import ResponseRenderer from '../../ResponseRenderer'
 import { Request, ResponseObject, ResponseToolkit } from '@hapi/hapi'
 import AddThreadUseCase from '../../../../Applications/use_case/AddThreadUseCase'
-import GetThreadWithCommentsUseCase, {
-  Payload as GetThreadWithCommentsUseCasePayload
-} from '../../../../Applications/use_case/GetThreadWithCommentsUseCase'
+import GetThreadWithCommentsAndRepliesUseCase, {
+  Payload as GetThreadWithCommentsAndRepliesUseCasePayload
+} from '../../../../Applications/use_case/GetThreadWithCommentsAndRepliesUseCase'
 
 export default class ThreadsHandler {
   constructor (
@@ -23,11 +23,11 @@ export default class ThreadsHandler {
   };
 
   getThreadHandler = async (request: Request, h: ResponseToolkit): Promise<ResponseObject> => {
-    const useCasePayload: GetThreadWithCommentsUseCasePayload = {
+    const useCasePayload: GetThreadWithCommentsAndRepliesUseCasePayload = {
       threadId: request.params.threadId
     }
 
-    const getThreadWithCommentsUseCase = this.container.resolve<GetThreadWithCommentsUseCase>(GetThreadWithCommentsUseCase)
+    const getThreadWithCommentsUseCase = this.container.resolve<GetThreadWithCommentsAndRepliesUseCase>(GetThreadWithCommentsAndRepliesUseCase)
     const thread = await getThreadWithCommentsUseCase.execute(useCasePayload)
 
     return this.renderer.success(h, undefined, { thread })

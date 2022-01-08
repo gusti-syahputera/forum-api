@@ -1,7 +1,5 @@
 import UsersTableTestHelper from '../../../Commons/tests/UsersTableTestHelper'
-import InvariantError from '../../../Commons/exceptions/InvariantError'
-import RegisterUser from '../../../Domains/users/entities/RegisterUser'
-import RegisteredUser from '../../../Domains/users/entities/RegisteredUser'
+import { RegisterUser, RegisteredUser } from '../../../Domains/users/entities'
 import pool from '../../database/postgres/pool'
 import UserRepositoryPostgres from '../UserRepositoryPostgres'
 
@@ -10,21 +8,23 @@ describe('UserRepositoryPostgres', () => {
   afterAll(async () => await pool.end())
 
   describe('verifyAvailableUsername function', () => {
-    it('should throw InvariantError when username not available', async () => {
+    it('should reject when username is not available', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ username: 'dicoding' }) // memasukan user baru dengan username dicoding
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, () => '')
 
       // Action & Assert
-      await expect(userRepositoryPostgres.verifyAvailableUsername('dicoding')).rejects.toThrowError(InvariantError)
+      await expect(userRepositoryPostgres.verifyAvailableUsername('dicoding'))
+        .rejects.toThrowError('USERNAME.ALREADY_TAKEN')
     })
 
-    it('should not throw InvariantError when username available', async () => {
+    it('should not reject when username is available', async () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, () => '')
 
       // Action & Assert
-      await expect(userRepositoryPostgres.verifyAvailableUsername('dicoding')).resolves.not.toThrowError(InvariantError)
+      await expect(userRepositoryPostgres.verifyAvailableUsername('dicoding'))
+        .resolves.not.toThrowError()
     })
   })
 
@@ -70,14 +70,13 @@ describe('UserRepositoryPostgres', () => {
   })
 
   describe('getPasswordByUsername', () => {
-    it('should throw InvariantError when user not found', async () => {
+    it('should reject when user not found', async () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, () => '')
 
       // Action & Assert
       return await expect(userRepositoryPostgres.getPasswordByUsername('dicoding'))
-        .rejects
-        .toThrowError(InvariantError)
+        .rejects.toThrowError('USERNAME.NOT_FOUND')
     })
 
     it('should return username password when user is found', async () => {
@@ -95,14 +94,14 @@ describe('UserRepositoryPostgres', () => {
   })
 
   describe('getIdByUsername', () => {
-    it('should throw InvariantError when user not found', async () => {
+    it('should reject when user not found', async () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, () => '')
 
       // Action & Assert
       await expect(userRepositoryPostgres.getIdByUsername('dicoding'))
         .rejects
-        .toThrowError(InvariantError)
+        .toThrowError('USER.NOT_FOUND')
     })
 
     it('should return user id correctly', async () => {
