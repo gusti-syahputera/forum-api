@@ -1,0 +1,47 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: node:14
+    env:
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_USER: forumapi_test_user
+      POSTGRES_DB: forumapi_test
+
+    services:
+      pgsql:
+        image: postgres:12
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          npm ci
+          npm run migrate up
+          npm run test
+        env:
+          CI: true
+          PGHOST_TEST: pgsql
+          PGPORT_TEST: 5432
+          PGUSER_TEST: ${{ env.POSTGRES_USER }}
+          PGDATABASE_TEST: ${{ env.POSTGRES_DB }}
+          PGPASSWORD_TEST: ${{ env.POSTGRES_PASSWORD }}
+          PGHOST: pgsql
+          PGPORT: 5432
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGDATABASE: ${{ env.POSTGRES_DB }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
+          REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
