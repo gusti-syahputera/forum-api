@@ -11,14 +11,18 @@ jobs:
     steps:
       - name: Deploy app via SSH
         uses: appleboy/ssh-action@master
+        env:
+          APP_PATH: ${{ secrets.APP_PATH }}
+          PROCESS_NAME: ${{ secrets.PROCESS_NAME }}
         with:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          envs: APP_PATH,PROCESS_NAME
           script: |
-            cd ~/forum-api
+            cd $APP_PATH
             git pull origin main
             npm ci
             npm run migrate up
-            pm2 restart auth-api
+            pm2 restart $PROCESS_NAME
