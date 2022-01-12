@@ -142,7 +142,7 @@ describe('CommentRepositoryPostgres', () => {
           .addComment({ thread_id: threadData.id, owner: userData.id })
       ))
 
-      // Arrange CommentLikes
+      // Arrange CommentLike
       const likeData = await CommentLikesTableTestHelper.addLike({
         comment_id: faker.random.arrayElement(commentsData).id,
         user_id: userData.id
@@ -157,12 +157,12 @@ describe('CommentRepositoryPostgres', () => {
       const comments = await repository.getCommentsByThreadId(threadData.id)
 
       // Assert
-      const expectedComment = commentsData
+      const expectedComments = commentsData
         .map(commentData => new ThreadComment({ ...commentData, username: userData.username, like_counts: 0 }))
         .sort((a, b) => +new Date(a.date) - +new Date(b.date))
-      const likedComment = expectedComment.find(comment => comment.id === likeData.comment_id)
+      const likedComment = expectedComments.find(comment => comment.id === likeData.comment_id)
       if (likedComment !== undefined) likedComment.likeCount = 1
-      expect(comments).toStrictEqual(expectedComment)
+      expect(comments).toStrictEqual(expectedComments)
     })
   })
 })
