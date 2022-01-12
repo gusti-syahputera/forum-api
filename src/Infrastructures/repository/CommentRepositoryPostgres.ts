@@ -56,7 +56,13 @@ export default class CommentRepositoryPostgres implements CommentRepository {
                  users.username,
                  comments.date,
                  comments.content,
-                 comments.deleted_at
+                 comments.deleted_at,
+                 COALESCE((SELECT CAST(COUNT(user_id) as INT) as likeCount
+                           FROM comments as _comments
+                                    JOIN likes ON _comments.id = likes.comment_id
+                           WHERE _comments.id = comments.id
+                           GROUP BY _comments.id
+                          ), 0) as like_counts
           FROM comments
                    INNER JOIN users ON comments.owner = users.id
           WHERE comments.thread_id = $1

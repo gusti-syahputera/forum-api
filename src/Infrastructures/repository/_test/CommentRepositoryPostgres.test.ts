@@ -5,6 +5,7 @@ import pool from '../../database/postgres/pool'
 import UsersTableTestHelper from '../../../Commons/tests/UsersTableTestHelper'
 import ThreadsTableTestHelper from '../../../Commons/tests/ThreadsTableTestHelper'
 import CommentsTableTestHelper from '../../../Commons/tests/CommentsTableTestHelper'
+import CommentLikesTableTestHelper from '../../../Commons/tests/CommentLikesTableTestHelper'
 
 import { AddedComment, Comment, NewComment, ThreadComment } from '../../../Domains/comments/entities'
 import CommentRepositoryPostgres from '../CommentRepositoryPostgres'
@@ -141,6 +142,12 @@ describe('CommentRepositoryPostgres', () => {
           .addComment({ thread_id: threadData.id, owner: userData.id })
       ))
 
+      // Arrange CommentLikes
+      const likeData = await CommentLikesTableTestHelper.addLike({
+        comment_id: faker.random.arrayElement(commentsData).id,
+        user_id: userData.id
+      })
+
       // Arrange doubles
       const generateIdMock = createMock<() => string>()
       const getCurrentTimeMock = createMock<() => string>()
@@ -151,8 +158,10 @@ describe('CommentRepositoryPostgres', () => {
 
       // Assert
       const expectedComment = commentsData
-        .map(commentData => new ThreadComment({ ...commentData, username: userData.username }))
+        .map(commentData => new ThreadComment({ ...commentData, username: userData.username, like_counts: 0 }))
         .sort((a, b) => +new Date(a.date) - +new Date(b.date))
+      const likedComment = expectedComment.find(comment => comment.id === likeData.comment_id)
+      if (likedComment !== undefined) likedComment.likeCount = 1
       expect(comments).toStrictEqual(expectedComment)
     })
   })
