@@ -39,6 +39,10 @@ export default class DomainErrorTranslator {
     'DELETE_COMMENT.COMMENT_NOT_FOUND': new NotFoundError('tidak dapat menghapus comment karena comment tidak ada'),
     'DELETE_COMMENT.USER_IS_NOT_OWNER': new AuthorizationError('tidak dapat menghapus comment karena Anda bukan pemilik comment ini'),
 
+    // Comment Likes
+    'TOGGLE_LIKE.THREAD_NOT_FOUND': new NotFoundError('tidak dapat mengubah like karena thread tidak ada'),
+    'TOGGLE_LIKE.COMMENT_NOT_FOUND': new NotFoundError('tidak dapat mengubah like karena comment tidak ada'),
+
     // Replies
     'NEW_REPLY.THREAD_NOT_FOUND': new NotFoundError('tidak dapat membuat reply baru karena thread tidak ada'),
     'NEW_REPLY.COMMENT_NOT_FOUND': new NotFoundError('tidak dapat membuat reply baru karena comment tidak ada'),
