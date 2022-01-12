@@ -25,4 +25,5 @@ jobs:
             git pull origin main
             npm ci
             npm run migrate up
+            npm run build
             pm2 restart $PROCESS_NAME
