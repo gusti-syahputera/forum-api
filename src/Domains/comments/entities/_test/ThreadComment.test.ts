@@ -44,7 +44,7 @@ describe('an ThreadComment entity', () => {
       deleted_at: faker.datatype.datetime().toISOString(),
       replies: []
     }
-    const payload2 = { ...payload1, deleted_at: null }
+    const payload2 = { ...payload1, deleted_at: null, likeCount: 1 }
 
     // Action
     const comment1 = new ThreadComment(payload1)
