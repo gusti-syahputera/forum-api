@@ -5,6 +5,7 @@ export default class ThreadComment<Reply = any> {
   content: string;
   deleted_at?: string | null;
   replies?: Reply[]
+  likeCount?: number = 0
 
   constructor (payload) {
     ({
@@ -13,7 +14,8 @@ export default class ThreadComment<Reply = any> {
       content: this.content,
       date: this.date,
       deleted_at: this.deleted_at,
-      replies: this.replies
+      replies: this.replies,
+      like_counts: this.likeCount
     } = this.verifyPayload(payload))
   }
 
@@ -24,6 +26,7 @@ export default class ThreadComment<Reply = any> {
     date: string
     deleted_at?: string | null
     replies?: Reply[]
+    like_counts?: number
   } {
     const { id, username, content, date, replies } = payload
     const { deleted_at: deletedAt } = payload

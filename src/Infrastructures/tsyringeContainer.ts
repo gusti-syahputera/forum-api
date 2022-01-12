@@ -26,10 +26,12 @@ import AddCommentUseCase from '../Applications/use_case/AddCommentUseCase'
 import DeleteCommentUseCase from '../Applications/use_case/DeleteCommentUseCase'
 import CommentRepositoryPostgres from './repository/CommentRepositoryPostgres'
 import ReplyRepositoryPostgres from './repository/ReplyRepositoryPostgres'
+import CommentLikeRepositoryPostgres from './repository/CommentLikeRepositoryPostgres'
 import GetThreadWithCommentsUseCase from '../Applications/use_case/GetThreadWithCommentsUseCase'
 import GetThreadWithCommentsAndRepliesUseCase from '../Applications/use_case/GetThreadWithCommentsAndRepliesUseCase'
 import AddReplyUseCase from '../Applications/use_case/AddReplyUseCase'
 import DeleteReplyUseCase from '../Applications/use_case/DeleteReplyUseCase'
+import ToggleCommentLikeUseCase from '../Applications/use_case/ToggleCommentLikeUseCase'
 
 /* eslint-disable symbol-description */
 export const tokens = {
@@ -48,7 +50,8 @@ export const tokens = {
   AuthenticationTokenManager: Symbol(),
   ThreadsRepository: Symbol(),
   CommentsRepository: Symbol(),
-  ReplyRepository: Symbol()
+  ReplyRepository: Symbol(),
+  CommentLikeRepository: Symbol()
 }
 /* eslint-enable symbol-description */
 const t = tokens
@@ -99,6 +102,10 @@ container.register(t.ReplyRepository, {
   useFactory: (c) => new ReplyRepositoryPostgres(
     c.resolve(t.pool), c.resolve(t.generateId), c.resolve(t.getCurrentTime)
   )
+})
+
+container.register(t.CommentLikeRepository, {
+  useFactory: (c) => new CommentLikeRepositoryPostgres(c.resolve(t.pool))
 })
 
 container.register(AddUserUseCase, {
@@ -173,5 +180,12 @@ container.register(DeleteReplyUseCase, {
   )
 })
 
-const container_: IocContainer = container
-export default container_
+container.register(ToggleCommentLikeUseCase, {
+  useFactory: (c) => new ToggleCommentLikeUseCase(
+    c.resolve(t.ThreadsRepository),
+    c.resolve(t.CommentsRepository),
+    c.resolve(t.CommentLikeRepository)
+  )
+})
+
+export default container as IocContainer
