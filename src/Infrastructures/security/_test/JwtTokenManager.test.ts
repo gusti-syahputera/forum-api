@@ -1,6 +1,5 @@
 import * as Jwt from '@hapi/jwt'
 
-import InvariantError from '../../../Commons/exceptions/InvariantError'
 import JwtTokenManager, { IJwtHelper } from '../JwtTokenManager'
 
 const getJwtHelperMock = (): IJwtHelper => ({
@@ -47,7 +46,7 @@ describe('JwtTokenManager', () => {
   })
 
   describe('verifyRefreshToken function', () => {
-    it('should throw InvariantError when verification failed', async () => {
+    it('should reject when verification failed', async () => {
       // Arrange
       const jwtTokenManager = new JwtTokenManager(Jwt.token)
       const accessToken = await jwtTokenManager.createAccessToken({ username: 'dicoding' })
@@ -57,15 +56,13 @@ describe('JwtTokenManager', () => {
         .rejects.toThrow('AUTHENTICATION.INVALID_REFRESH_TOKEN')
     })
 
-    it('should not throw InvariantError when refresh token verified', async () => {
+    it('should not reject when refresh token is verified', async () => {
       // Arrange
       const jwtTokenManager = new JwtTokenManager(Jwt.token)
       const refreshToken = await jwtTokenManager.createRefreshToken({ username: 'dicoding' })
 
       // Action & Assert
-      await expect(jwtTokenManager.verifyRefreshToken(refreshToken))
-        .resolves
-        .not.toThrow(InvariantError)
+      await expect(jwtTokenManager.verifyRefreshToken(refreshToken)).resolves.not.toThrow()
     })
   })
 
