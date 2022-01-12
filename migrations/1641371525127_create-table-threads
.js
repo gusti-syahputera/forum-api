@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 const tableName = 'threads'
 
 exports.shorthands = undefined

@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 // eslint-disable-next-line no-unused-vars
 const { MigrationBuilder } = require('node-pg-migrate/dist/types')
 const tableName = 'replies'
